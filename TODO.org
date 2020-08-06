@@ -1,0 +1,16 @@
+* Diseño de la interfaz grafica
+** DONE Prototipo del layout general
+   CLOSED: [2020-08-06 jue. 12:32]
+   #+ATTR_ORG: :width 300
+   [[file:Diseño de Interfaz/Diseño_de_Interfaz_Prototipo1.JPG]]
+   Se va a separar en:
+*** Alumno
+    Va a poder ver tareas, subir respuestas, y ver notas
+*** Maestro
+    Va a poder subir tareas y calificar las notas del alumno
+*** Admin
+    Va a añadir y eliminar usuarios, ademas de programar las bajas para
+    mantenimiento
+
+* Diseño de la base de datos
+* Estructura del BackEnd
