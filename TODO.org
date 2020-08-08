@@ -13,4 +13,17 @@
     mantenimiento
 
 * Diseño de la base de datos
+** DONE Prototipo de la base de datos:
+   CLOSED: [2020-08-06 jue. 13:58]
+    [[file:DiseñoDB/DiseñoBaseDatos1.png]]
+** DONE Implementacion de la primera parte de la base de datos
+   CLOSED: [2020-08-07 vie. 18:39]
+   Se implementaron los alumnos, maestros y grados
+
 * Estructura del BackEnd
+** DONE Definir rutas basicas
+   CLOSED: [2020-08-06 jue. 18:48]
+** TODO Hashes para los passwords
+*** DONE Prototipo 1
+    CLOSED: [2020-08-07 vie. 18:40]
+    Se hizo con hashlib de python. Tiene el problema de que los hashes quedan en bianrios. Los necesito en cadenas de texto
