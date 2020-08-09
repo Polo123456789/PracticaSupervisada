@@ -145,51 +145,61 @@ def calificar():
 # Administradores
 @app.route("/gestionDeUsuarios", methods=["GET", "POST"])
 def gestionUsuarios():
-    if "type" in session:
-        if session["type"] == "Admin":
-            return "Gestion de usuarios"
+    if not "type" in session:
+        return redirect("/404")
+    if session["type"] != "Admin":
+        return redirect("/404")
 
-    return redirect("/404")
+    return render_template("gestionU.html", type=session["type"])
 
 @app.route("/gestionDeUsuarios/actualizarA/<int:id>", methods=["GET", "POST"])
 def gestionUsuariosActualizarA(id):
-    if "type" in session:
-        if session["type"] == "Admin":
-            return "Gestion de usuarios"
+    if not "type" in session:
+        return redirect("/404")
+    if session["type"] != "Admin":
+        return redirect("/404")
 
-    return redirect("/404")
+    return "AC"
 
 @app.route("/gestionDeUsuarios/actualizarM/<int:id>", methods=["GET", "POST"])
 def gestionUsuariosActualizarM(id):
-    if "type" in session:
-        if session["type"] == "Admin":
-            return "Gestion de usuarios"
+    if not "type" in session:
+        return redirect("/404")
+    if session["type"] != "Admin":
+        return redirect("/404")
 
-    return redirect("/404")
+    return "AC"
 
 @app.route("/gestionDeUsuarios/actualizarG/<int:id>", methods=["GET", "POST"])
 def gestionUsuariosActualizarG(id):
-    if "type" in session:
-        if session["type"] == "Admin":
-            return "Gestion de usuarios"
-
-    return redirect("/404")
+    if not "type" in session:
+        return redirect("/404")
+    if session["type"] != "Admin":
+        return redirect("/404")
 
 @app.route("/gestionDeUsuarios/anadirA", methods=["GET", "POST"])
 def gestionUsuariosAnadirA():
-    if "type" in session:
-        if session["type"] == "Admin":
-            return "Gestion de usuarios"
+    if not "type" in session:
+        return redirect("/404")
+    if session["type"] != "Admin":
+        return redirect("/404")
 
-    return redirect("/404")
+    if request.method == "POST":
+        return redirect("/gestionDeUsuarios")
+    else:
+        return render_template("anadirA.html", type=session["type"])
 
 @app.route("/gestionDeUsuarios/anadirM", methods=["GET", "POST"])
 def gestionUsuariosAnadirM():
-    if "type" in session:
-        if session["type"] == "Admin":
-            return "Gestion de usuarios"
+    if not "type" in session:
+        return redirect("/404")
+    if session["type"] != "Admin":
+        return redirect("/404")
 
-    return redirect("/404")
+    if request.method == "POST":
+        return redirect("/gestionDeUsuarios")
+    else:
+        return render_template("anadirM.html", type=session["type"])
 
 @app.route("/gestionDeUsuarios/anadirG", methods=["GET", "POST"])
 def gestionUsuariosAnadirG():
@@ -197,23 +207,40 @@ def gestionUsuariosAnadirG():
         if session["type"] == "Admin":
             return "Gestion de usuarios"
 
-    return redirect("/404")
+    if request.method == "POST":
+        return redirect("/gestionDeUsuarios")
+    else:
+        return render_template("anadirG.html", type=session["type"])
+
+@app.route("/gestionDeUsuarios/anadirC", methods=["GET", "POST"])
+def gestionUsuariosAnadirC():
+    if "type" in session:
+        if session["type"] == "Admin":
+            return "Gestion de usuarios"
+
+    if request.method == "POST":
+        return redirect("/gestionDeUsuarios")
+    else:
+        return render_template("anadirC.html", type=session["type"])
 
 @app.route("/gestionDeUsuarios/Eliminar/<tipo>/<int:id>", methods=["GET", "POST"])
 def eliminar(tipo, id):
-    if "type" in session:
-        if session["type"] == "Admin":
-            return "Eliminar"
+    if not "type" in session:
+        return redirect("/404")
+    if session["type"] != "Admin":
+        return redirect("/404")
 
-    return redirect("/404")
+    return "Eliminar"
 
 @app.route("/mantenimiento", methods=["GET", "POST"])
 def mantenimiento():
-    if "type" in session:
-        if session["type"] == "Admin":
-            return "Mantenimiento"
+    if not "type" in session:
+        return redirect("/404")
+    if session["type"] != "Admin":
+        return redirect("/404")
 
-    return redirect("/404")
+    return "Mantenimiento"
+
 
 @app.route("/404")
 def noPage():

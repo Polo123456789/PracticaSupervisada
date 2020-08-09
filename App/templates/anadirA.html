@@ -1,0 +1,45 @@
+{% extends "base.html" %}
+
+{% block contenido %}
+    {% with mensaje = get_flashed_messages() %}
+        {%if mensaje %}
+             <div class="alert alert-danger" role="alert">
+                {{ mensaje }}
+             </div>
+        {% endif %}
+    {% endwith %}
+
+    <h1>Alumnos</h1>
+    <p> Ingrese los datos del alumno</p>
+
+    <form action="/gestionDeUsuarios/anadirA" method="post">
+        <table class="table">
+            <tr>
+                <th>Nombre de Usuario</th>
+                <th><input type="text" name="nombreUsuario"/></th>
+            </tr>
+            <tr>
+                <th>Contraseña</th>
+                <th><input type="password" name="contrasena"/></th>
+            </tr>
+            <tr>
+                <th>Nombre</th>
+                <th><input type="text" name="nombre"/></th>
+            </tr>
+            <tr>
+                <th>Correo Electronico</th>
+                <th><input type="email" name="correoElectronico"/></th>
+            </tr>
+            <tr>
+                <th>Telefono de los padres</th>
+                <th><input type="text" name="telefonoPadres"/></th>
+            </tr>
+            <tr>
+                <th>Id Grado</th>
+                <th><input type="number" name="idGrado"/></th>
+            </tr>
+        </table>
+        <input type="submit" value="Añadir alumno"/>
+    </form>
+
+{% endblock %}

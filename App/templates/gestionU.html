@@ -1,0 +1,75 @@
+{% extends "base.html" %}
+
+{% block contenido %}
+    {% with mensaje = get_flashed_messages() %}
+        {%if mensaje %}
+             <div class="alert alert-danger" role="alert">
+                {{ mensaje }}
+             </div>
+        {% endif %}
+    {% endwith %}
+
+     <div id="añadirContenido">
+         <div class="row">
+             <div class="col-lg">
+                 <div class="jumbotron">
+                     <h1 class="display-4">Añadir Alumnos</h1>
+                     <p class="lead">Previamente necesita:</p>
+                     <hr class="my-4">
+                     <p>
+                         <ul>
+                             <li>
+                                 Correo Electronico
+                             </li>
+                             <li>
+                                 Telefono de los Padres
+                             </li>
+                             <li>
+                                 El grado
+                             </li>
+                         </ul>
+                     </p>
+                     <a href="/gestionDeUsuarios/anadirA" class="btn btn-primary">Añadir</a>
+                     <a href="/gestionDeUsuarios/actualizarA/-1" class="btn btn-primary">Actualizar</a>
+                 </div>
+             </div>
+         </div>
+         <div class="row">
+             <div class="col-lg">
+                 <div class="jumbotron">
+                     <h1 class="display-4">Añadir Maestros</h1>
+                     <hr class="my-4">
+                     <p>Opcionalmente, aqui puede añadir administradores tambien.</p>
+                     <a href="/gestionDeUsuarios/anadirM" class="btn btn-primary">Añadir</a>
+                     <a href="/gestionDeUsuarios/actualizarM/-1" class="btn btn-primary">Actualizar</a>
+                 </div>
+             </div>
+         </div>
+         <div class="row">
+             <div class="col-lg">
+                 <div class="jumbotron">
+                     <h1 class="display-4">Añadir Grados</h1>
+                     <hr class="my-4">
+                     <p>Unicamente tiene que ingresar el nombre, codigo, o identificador de grado</p>
+                     <a href="/gestionDeUsuarios/anadirG" class="btn btn-primary">Añadir</a>
+                     <a href="/gestionDeUsuarios/actualizarG/-1" class="btn btn-primary">Actualizar</a>
+                 </div>
+             </div>
+         </div>
+         <div class="row">
+             <div class="col-lg">
+                 <div class="jumbotron">
+                     <h1 class="display-4">Clases</h1>
+                     <p class="lead">Requiere de un grado y de un maestro.</p>
+                     <hr class="my-4">
+                     <p>Los alumnos que formen parte del grado seran inscritos automaticamente a la clase</p>
+                     <a class="btn btn-primary btn-lg" href="/gestionDeUsuarios/anadirC" role="button">Crear Clase</a>
+                 </div>
+             </div>
+         </div>
+     </div>
+     <div id="enlistarContenido">
+
+     </div>
+
+{% endblock %}
