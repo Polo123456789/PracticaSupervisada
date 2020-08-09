@@ -10,9 +10,10 @@ db = SQLAlchemy(app)
 
 """---- Base de datos -----"""
 class Grado(db.Model):
-    Id      = db.Column(db.Integer, primary_key=True)
-    Grado   = db.Column(db.String(30), nullable=False)
-    alumnos = db.relationship("Alumno", backref="grado")
+    Id                = db.Column(db.Integer, primary_key=True)
+    Grado             = db.Column(db.String(30), nullable=False)
+    alumnos           = db.relationship("Alumno", backref="grado")
+    clases            = db.relationship("Clases", backref="clasesPorGrado")
 
 class Alumno(db.Model):
     Id                = db.Column(db.Integer, primary_key=True)
@@ -22,6 +23,7 @@ class Alumno(db.Model):
     CorreoElectronico = db.Column(db.String(30), nullable=False)
     TelefonoPadres    = db.Column(db.String(10), nullable=False)
     IdGrado           = db.Column(db.Integer, db.ForeignKey('grado.Id'), nullable=False)
+    tareas            = db.relationship("Tareas", backref="tareasPorAlumno")
 
 class Maestro(db.Model):
     Id                = db.Column(db.Integer, primary_key=True)
@@ -30,6 +32,28 @@ class Maestro(db.Model):
     Nombre            = db.Column(db.String(30), nullable=False)
     CorreoElectronico = db.Column(db.String(30), nullable=False)
     Admin             = db.Column(db.Boolean, nullable=False)
+    clases            = db.relationship("Clases", backref="clasesPorMaestro")
+
+class Clases(db.Model):
+    Id                = db.Column(db.Integer, primary_key=True)
+    Nombre            = db.Column(db.String(30), nullable=False)
+    IdGrado           = db.Column(db.Integer, db.ForeignKey('grado.Id'), nullable=False)
+    IdMaestro         = db.Column(db.Integer, db.ForeignKey('maestro.Id'), nullable=False)
+    tareas            = db.relationship("Tareas", backref="tareasPorClase")
+
+class Tareas(db.Model):
+    Id                = db.Column(db.Integer, primary_key=True)
+    IdAlumno          = db.Column(db.Integer, db.ForeignKey('alumno.Id'), nullable=False)
+    IdClase           = db.Column(db.Integer, db.ForeignKey('clases.Id'), nullable=False)
+    Titulo            = db.Column(db.String(30), nullable=False)
+    Descripcion       = db.Column(db.String(120), nullable=False)
+    PathAdjuntos      = db.Column(db.String(50), nullable=False)
+    Calificado        = db.Column(db.Boolean, nullable=False)
+    Nota              = db.Column(db.Float, nullable=True)
+    HoraLimite        = db.Column(db.DateTime, nullable=False)
+    Entregado         = db.Column(db.Boolean, nullable=False)
+    PathRespuesta     = db.Column(db.String(50), nullable=True)
+    HoraEntrega       = db.Column(db.DateTime, nullable=False)
 
 """---- Rutas de la pagina web -----"""
 # Login y home page
@@ -124,6 +148,62 @@ def gestionUsuarios():
     if "type" in session:
         if session["type"] == "Admin":
             return "Gestion de usuarios"
+
+    return redirect("/404")
+
+@app.route("/gestionDeUsuarios/actualizarA/<int:id>", methods=["GET", "POST"])
+def gestionUsuariosActualizarA(id):
+    if "type" in session:
+        if session["type"] == "Admin":
+            return "Gestion de usuarios"
+
+    return redirect("/404")
+
+@app.route("/gestionDeUsuarios/actualizarM/<int:id>", methods=["GET", "POST"])
+def gestionUsuariosActualizarM(id):
+    if "type" in session:
+        if session["type"] == "Admin":
+            return "Gestion de usuarios"
+
+    return redirect("/404")
+
+@app.route("/gestionDeUsuarios/actualizarG/<int:id>", methods=["GET", "POST"])
+def gestionUsuariosActualizarG(id):
+    if "type" in session:
+        if session["type"] == "Admin":
+            return "Gestion de usuarios"
+
+    return redirect("/404")
+
+@app.route("/gestionDeUsuarios/anadirA", methods=["GET", "POST"])
+def gestionUsuariosAnadirA():
+    if "type" in session:
+        if session["type"] == "Admin":
+            return "Gestion de usuarios"
+
+    return redirect("/404")
+
+@app.route("/gestionDeUsuarios/anadirM", methods=["GET", "POST"])
+def gestionUsuariosAnadirM():
+    if "type" in session:
+        if session["type"] == "Admin":
+            return "Gestion de usuarios"
+
+    return redirect("/404")
+
+@app.route("/gestionDeUsuarios/anadirG", methods=["GET", "POST"])
+def gestionUsuariosAnadirG():
+    if "type" in session:
+        if session["type"] == "Admin":
+            return "Gestion de usuarios"
+
+    return redirect("/404")
+
+@app.route("/gestionDeUsuarios/Eliminar/<tipo>/<int:id>", methods=["GET", "POST"])
+def eliminar(tipo, id):
+    if "type" in session:
+        if session["type"] == "Admin":
+            return "Eliminar"
 
     return redirect("/404")
 

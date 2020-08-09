@@ -30,12 +30,18 @@
     [[file:DiseñoDB/DiseñoBaseDatos1.png]]
 ** DONE Implementacion de la primera parte de la base de datos
    CLOSED: [2020-08-07 vie. 18:39]
-   Se implementaron los alumnos, maestros y grados
+   Se implementaron los alumnos, maestros y grados. Estos son los escenciales
+   para inciar las pruebas para el inicio de sesion
+** TODO Implementacion de las demas tablas de la base de datos
+   En el proceso, decidi eliminar la tabla redundante "ClasesAsignadas",
+   esta tenia que decir que clase era para cada maestro. Pero en si las
+   clases ya tienen el id del maestro, haciendo la tabla "ClasesAsignadas"
+   redundante.
 
-* Estructura del BackEnd
+* Estructura del BackEnd [3/4] [75%]
 ** DONE Definir rutas basicas
    CLOSED: [2020-08-06 jue. 18:48]
-** TODO Hashes para los passwords
+** TODO Hashes para los passwords [66%] [2/3]
 *** DONE Prototipo 1
     CLOSED: [2020-08-07 vie. 18:40]
     Se hizo con hashlib de python. Tiene el problema de que los hashes quedan en
@@ -45,6 +51,10 @@
     Trabajando con el hashlib de python, se hizo a base del sistema de hashes 
     md5. Se puede mejorar a futuro, pero con este se puede proseguir para las
     pruebas al sistema.
+*** TODO Hash final
+    Nececitamos un algoritmno de hash que sea seguro, con un salt variado, y
+    con el que solo tenga que cambiar las funciones del archivo "hash.py"
+
 ** DONE Inicio de sesion 
    CLOSED: [2020-08-08 sáb. 17:50]
    Que se pueda ingresar el password y la contraseña con seguridad, y que tire
