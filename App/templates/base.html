@@ -9,6 +9,10 @@
         <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js"></script>
         <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js"></script>
         <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js"></script>
+        <script>
+         {% block script%}
+         {% endblock %}
+        </script>
     </head>
     <body>
            <div class="fluid-container">
@@ -45,7 +49,10 @@
                                     </li>
                                 {% else %}
                                     <li class="nav-item active">
-                                        <a class="nav-link" href="/">Tiene que iniciar sescion</a>
+                                        <a class="nav-link" href="/login/alumno">Iniciar como Alumno</a>
+                                    </li>
+                                    <li class="nav-item active">
+                                        <a class="nav-link" href="/login/maestro">Iniciar como Maestro</a>
                                     </li>
                                 {% endif %}
                             </ul>
@@ -53,6 +60,7 @@
                     </nav>
                 </div>
             </div>
+           </div>
             <div class="container">
                 {% block contenido %}
                 {% endblock %}

@@ -1,4 +1,6 @@
-from flask import Flask, render_template, session, redirect, request
+import hash
+from flask import Flask, render_template, session, redirect, request, url_for\
+    , flash
 from flask_sqlalchemy import SQLAlchemy
 
 app = Flask(__name__)
@@ -15,7 +17,7 @@ class Grado(db.Model):
 class Alumno(db.Model):
     Id                = db.Column(db.Integer, primary_key=True)
     NombreUsuario     = db.Column(db.String(30), unique=True, nullable=False)
-    Contrasena        = db.Column(db.String(64), nullable=False)
+    Contrasena        = db.Column(db.String(32), nullable=False)
     Nombre            = db.Column(db.String(30), nullable=False)
     CorreoElectronico = db.Column(db.String(30), nullable=False)
     TelefonoPadres    = db.Column(db.String(10), nullable=False)
@@ -24,39 +26,103 @@ class Alumno(db.Model):
 class Maestro(db.Model):
     Id                = db.Column(db.Integer, primary_key=True)
     NombreUsuario     = db.Column(db.String(30), unique=True, nullable=False)
-    Contrasena        = db.Column(db.String(64), nullable=False)
+    Contrasena        = db.Column(db.String(32), nullable=False)
     Nombre            = db.Column(db.String(30), nullable=False)
     CorreoElectronico = db.Column(db.String(30), nullable=False)
     Admin             = db.Column(db.Boolean, nullable=False)
 
 """---- Rutas de la pagina web -----"""
-@app.route("/", methods=["GET", "POST"])
+# Login y home page
+@app.route("/")
 def index():
-    if not "type" in session:
-        session["type"] = ""
+    return render_template("homePage.html")
 
-    return render_template("base.html", type=session["type"])
+@app.route("/login")
+def loginVacio():
+    return redirect("/")
 
+@app.route("/login/alumno", methods=["GET", "POST"])
+def loginAlumno():
+    if request.method == "POST":
+        user = request.form.get("nombre")
+        passwd = request.form.get("pwd")
+        original = Alumno.query.filter_by(NombreUsuario=user).first()
+        if not original:
+            flash("Ese nombre de usuario no existe")
+            return redirect("/login/alumno")
+        if hash.check_passwd(passwd, original.Contrasena):
+            session["type"] = "Alumno"
+            return redirect("/tareas")
+        else:
+            flash("Error al iniciar sesion")
+            return redirect("/login/alumno")
+
+    else:
+        return render_template("login.html", quien="alumno")
+
+@app.route("/login/maestro", methods=["GET", "POST"])
+def loginMaestro():
+    if request.method == "POST":
+        user = request.form.get("nombre")
+        passwd = request.form.get("pwd")
+        original = Maestro.query.filter_by(NombreUsuario=user).first()
+        if not original:
+            flash("Ese nombre de usuario no existe")
+            return redirect("/login/maestro")
+        if hash.check_passwd(passwd, original.Contrasena):
+            if original.Admin:
+                session["type"] = "Admin"
+                return redirect("/gestionDeUsuarios")
+            else:
+                session["type"] = "Profe"
+                return redirect("calificar")
+        else:
+            flash("Error al iniciar sesion")
+            return redirect("/login/maestro")
+
+    else:
+        return render_template("login.html", quien="maestro")
+
+# Alumnos
 @app.route("/tareas", methods=["GET", "POST"])
 def tareas():
-    return "Tareas"
+    if "type" in session:
+        if session["type"] == "Alumno":
+            return "Ver mis tareas"
+
+    return redirect("/404")
 
 @app.route("/notas")
 def notas():
-    return "Notas"
+    if "type" in session:
+        if session["type"] == "Alumno":
+            return "Ver mis notas"
 
+    return redirect("/404")
+
+# Maestros
 @app.route("/crear_tareas", methods=["GET", "POST"])
 def crearTareas():
-    return "Crear tareas"
+    if "type" in session:
+        if session["type"] == "Profe":
+            return "Crear tareas"
+
+    return redirect("/404")
 
 @app.route("/calificar", methods=["GET", "POST"])
 def calificar():
-    return "calificar"
+    if "type" in session:
+        if session["type"] == "Profe":
+            return "Calificar Tareas"
 
+    return redirect("/404")
+
+
+# Administradores
 @app.route("/gestionDeUsuarios", methods=["GET", "POST"])
 def gestionUsuarios():
     if "type" in session:
-        if session["type"] != "Admin":
+        if session["type"] == "Admin":
             return "Gestion de usuarios"
 
     return redirect("/404")
@@ -66,6 +132,7 @@ def mantenimiento():
     if "type" in session:
         if session["type"] == "Admin":
             return "Mantenimiento"
+
     return redirect("/404")
 
 @app.route("/404")

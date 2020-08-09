@@ -1,0 +1,23 @@
+{% extends "base.html" %}
+
+{% block contenido %}
+    <h1>Login</h1>
+
+    {% with mensaje = get_flashed_messages() %}
+        {%if mensaje %}
+            <div class="alert alert-danger" role="alert">
+                {{ mensaje }}
+            </div>
+        {% endif %}
+    {% endwith %}
+
+    <form action="/login/{{ quien }}" method="post">
+        <p>Nombre de Usuario</p>
+        <input type="text" name="nombre">
+        <p>Contraseña</p>
+        <input type="password" name="pwd">
+        <br><br>
+        <input type="submit" value="Iniciar Sesion">
+    </form>
+
+{% endblock %}

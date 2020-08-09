@@ -1,16 +1,7 @@
-import hashlib
-import os
+from hashlib import md5
 
-def hash_password(password):
-    salt = os.urandom(32)
-    key = hashlib.pbkdf2_hmac('sha256', password.encode('utf-8'), salt, 100000)
-    return (salt + key)
+def hash_passwd(pwd):
+    return md5(pwd.encode('utf-8')).hexdigest()
 
-def check_password(entered, storedHash):
-    salt = storedHash[:32]
-    key = storedHash[32:]
-    newKey = hashlib.pbkdf2_hmac('sha256', entered.encode('utf-8'), salt, 100000)
-    if key == newKey:
-        return True
-    else:
-        return False
+def check_passwd(entered, h):
+    return hash_passwd(entered) == h

@@ -1,3 +1,15 @@
+* Descripcion general
+  El proyecto se organiza en 3 partes. En esta hoja se describira el progreso
+  que se haga en cada una de las partes, con las fechas y horas a las que se 
+  completo. Puede ver el documento en texto plano, pero recomiendo verlo en un
+  editor de org, ya que le data el estilo correcto a cada una de las partes.
+
+** Interfaz grafica
+  
+** Base de Datos
+
+** Backend
+
 * Diseño de la interfaz grafica
 ** DONE Prototipo del layout general
    CLOSED: [2020-08-06 jue. 12:32]
@@ -26,4 +38,18 @@
 ** TODO Hashes para los passwords
 *** DONE Prototipo 1
     CLOSED: [2020-08-07 vie. 18:40]
-    Se hizo con hashlib de python. Tiene el problema de que los hashes quedan en bianrios. Los necesito en cadenas de texto
+    Se hizo con hashlib de python. Tiene el problema de que los hashes quedan en
+    bianrios. Los necesito en cadenas de texto.
+*** DONE Prototipo 2
+    CLOSED: [2020-08-08 sáb. 08:53]
+    Trabajando con el hashlib de python, se hizo a base del sistema de hashes 
+    md5. Se puede mejorar a futuro, pero con este se puede proseguir para las
+    pruebas al sistema.
+** DONE Inicio de sesion 
+   CLOSED: [2020-08-08 sáb. 17:50]
+   Que se pueda ingresar el password y la contraseña con seguridad, y que tire
+   error en caso de que no se inicie correctamente
+** DONE Restringir acceso a las paginas
+   CLOSED: [2020-08-08 sáb. 18:22]
+   Si no son del tipo correcto, como un alumno tratando de entrar a una pagina
+   de admin, se les envia a la pagina 404. 
