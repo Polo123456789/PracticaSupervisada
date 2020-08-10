@@ -55,7 +55,7 @@
    clases ya tienen el id del maestro, haciendo la tabla "ClasesAsignadas"
    redundante.
 
-* Estructura del BackEnd [4/5] [80%]
+* Estructura del BackEnd [5/6] [83%]
 ** DONE Definir rutas basicas
    CLOSED: [2020-08-06 jue. 18:48]
 ** TODO Hashes para los passwords [66%] [2/3]
@@ -82,3 +82,7 @@
    de admin, se les envia a la pagina 404. 
 ** DONE Rutas del los administradores del sistema
    CLOSED: [2020-08-09 dom. 16:49]
+** DONE Funcion para verificar entrada
+   CLOSED: [2020-08-09 dom. 17:15]
+   No forma parte exclusiva del backend, pero se añadio el diseño de una funcion
+   para verificar que no se pasen entradas vacias

@@ -1,0 +1,46 @@
+{% extends "base.html" %}
+
+{% block contenido %}
+    {% with mensaje = get_flashed_messages() %}
+        {%if mensaje %}
+             <div class="alert alert-danger" role="alert">
+                {{ mensaje }}
+             </div>
+        {% endif %}
+    {% endwith %}
+
+    <h1>Grado</h1>
+    <p>Ingrese unicamente el nombre del grado</p>
+    <h4>Ejemplos:</h4>
+    <ul>
+        <li>V Bachillerato en Ciencias y Letras</li>
+        <li>1ero Primaria A</li>
+        <li>2do Basico B</li>
+    </ul>
+
+    <form action="/gestionDeUsuarios/anadirG" method="post">
+        <table class="table">
+            <tr>
+                <th>Grado</th>
+                <th><input id="Caja" type="text" name="grado" onkeyup="verificar('Caja')" /></th>
+            </tr>
+        </table>
+        <input id="Subir" type="submit" value="Añadir Grado" disabled/>
+    </form>
+
+{% endblock %}
+
+{% block script %}
+    <script>
+    function verificar(item) {
+         boton = document.getElementById("Subir")
+         caja = document.getElementById(item)
+
+         if (caja.value == "") {
+             boton.disabled = true
+         } else {
+             boton.disabled = false
+        }
+    }
+    </script>
+{% endblock %}

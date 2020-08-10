@@ -2,6 +2,7 @@ import hash
 from flask import Flask, render_template, session, redirect, request, url_for\
     , flash
 from flask_sqlalchemy import SQLAlchemy
+from sqlalchemy import exc
 
 app = Flask(__name__)
 app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///tmp/test.db'
@@ -11,7 +12,7 @@ db = SQLAlchemy(app)
 """---- Base de datos -----"""
 class Grado(db.Model):
     Id                = db.Column(db.Integer, primary_key=True)
-    Grado             = db.Column(db.String(30), nullable=False)
+    Grado             = db.Column(db.String(30), unique=True, nullable=False)
     alumnos           = db.relationship("Alumno", backref="grado")
     clases            = db.relationship("Clases", backref="clasesPorGrado")
 
@@ -203,11 +204,20 @@ def gestionUsuariosAnadirM():
 
 @app.route("/gestionDeUsuarios/anadirG", methods=["GET", "POST"])
 def gestionUsuariosAnadirG():
-    if "type" in session:
-        if session["type"] == "Admin":
-            return "Gestion de usuarios"
+    if not "type" in session:
+        return redirect("/404")
+    if session["type"] != "Admin":
+        return redirect("/404")
 
     if request.method == "POST":
+        nombre = request.form.get('grado')
+        grado = Grado(Grado=nombre)
+        check = Grado.query.filter_by(Grado=nombre).first()
+        if check is None:
+            db.session.add(grado)
+            db.session.commit()
+        else:
+            flash(f'Intento ingresar un dato que ya existe. "{check.Grado}" tiene el Id:"{check.Id}"')
         return redirect("/gestionDeUsuarios")
     else:
         return render_template("anadirG.html", type=session["type"])
