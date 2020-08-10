@@ -128,20 +128,21 @@ def notas():
 # Maestros
 @app.route("/crear_tareas", methods=["GET", "POST"])
 def crearTareas():
-    if "type" in session:
-        if session["type"] == "Profe":
-            return "Crear tareas"
+    if not "type" in session:
+        return redirect("/404")
+    if session["type"] != "Admin" and session["type"] != "Profe":
+        return redirect("/404")
 
-    return redirect("/404")
+    return "Crear tareas"
 
 @app.route("/calificar", methods=["GET", "POST"])
 def calificar():
-    if "type" in session:
-        if session["type"] == "Profe":
-            return "Calificar Tareas"
+    if not "type" in session:
+        return redirect("/404")
+    if session["type"] != "Admin" and session["type"] != "Profe":
+        return redirect("/404")
 
-    return redirect("/404")
-
+    return "Calificar"
 
 # Administradores
 @app.route("/gestionDeUsuarios", methods=["GET", "POST"])
@@ -176,7 +177,16 @@ def gestionUsuariosActualizarG(id):
     if not "type" in session:
         return redirect("/404")
     if session["type"] != "Admin":
+        flash("No es administrador")
         return redirect("/404")
+    if request.method == "POST":
+        return redirect("/gestionDeUsuarios/actualizarG/-1")
+    else:
+        if id == 0:
+            grados = Grado.query.all()
+            return render_template("enlistarG.html", grados=grados)
+        else:
+            return f"id: {id}"
 
 @app.route("/gestionDeUsuarios/anadirA", methods=["GET", "POST"])
 def gestionUsuariosAnadirA():
