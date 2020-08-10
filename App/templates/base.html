@@ -31,7 +31,7 @@
                                     <li class="nav-item active">
                                         <a class="nav-link" href="/notas">Notas</a>
                                     </li>
-                                {% elif type== "Profe" or type=="Admin" %}
+                                {% elif type== "Profe" %}
                                     <li class="nav-item active">
                                         <a class="nav-link" href="/crear_tareas">Crear Tareas</a>
                                     </li>
@@ -39,6 +39,12 @@
                                         <a class="nav-link" href="/calificar">Calificar</a>
                                     </li>
                                 {% elif type=="Admin" %}
+                                    <li class="nav-item active">
+                                        <a class="nav-link" href="/crear_tareas">Crear Tareas</a>
+                                    </li>
+                                    <li class="nav-item active">
+                                        <a class="nav-link" href="/calificar">Calificar</a>
+                                    </li>
                                     <li class="nav-item active">
                                         <a class="nav-link" href="/gestionDeUsuarios">Gestionar Usuarios</a>
                                     </li>
