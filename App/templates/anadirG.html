@@ -1,14 +1,6 @@
 {% extends "base.html" %}
 
 {% block contenido %}
-    {% with mensaje = get_flashed_messages() %}
-        {%if mensaje %}
-             <div class="alert alert-danger" role="alert">
-                {{ mensaje }}
-             </div>
-        {% endif %}
-    {% endwith %}
-
     <h1>Grado</h1>
     <p>Ingrese unicamente el nombre del grado</p>
     <h4>Ejemplos:</h4>

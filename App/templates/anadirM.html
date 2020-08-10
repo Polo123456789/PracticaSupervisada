@@ -1,10 +1,11 @@
 {% extends "base.html" %}
 
 {% block contenido %}
-    <h1>Alumnos</h1>
-    <p> Ingrese los datos del alumno</p>
+    <h1>Maestros</h1>
+    <p> Ingrese los datos del maestro.</p>
+    <p><strong>Nota:</strong> Si lo marca la caja admin, le dara acceso total al usuario para ver y alterar los datos en la base de datos</p>
 
-    <form action="/gestionDeUsuarios/anadirA" method="post">
+    <form action="/gestionDeUsuarios/anadirM" method="post">
         <table class="table">
             <tr>
                 <th>Nombre de Usuario</th>
@@ -23,15 +24,11 @@
                 <th><input type="email" name="correoElectronico"/></th>
             </tr>
             <tr>
-                <th>Telefono de los padres</th>
-                <th><input type="text" name="telefonoPadres"/></th>
-            </tr>
-            <tr>
-                <th>Id Grado</th>
-                <th><input type="number" name="idGrado"/></th>
+                <th>Administador</th>
+                <th><input type="checkbox" name="admin"/></th>
             </tr>
         </table>
-        <input type="submit" value="Añadir alumno"/>
+        <input type="submit" value="Añadir Maestro"/ disabled>
     </form>
 
 {% endblock %}

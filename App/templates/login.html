@@ -3,14 +3,6 @@
 {% block contenido %}
     <h1>Login</h1>
 
-    {% with mensaje = get_flashed_messages() %}
-        {%if mensaje %}
-            <div class="alert alert-danger" role="alert">
-                {{ mensaje }}
-            </div>
-        {% endif %}
-    {% endwith %}
-
     <form action="/login/{{ quien }}" method="post">
         <p>Nombre de Usuario</p>
         <input type="text" name="nombre">

@@ -1,14 +1,6 @@
 {% extends "base.html" %}
 
 {% block contenido %}
-    {% with mensaje = get_flashed_messages() %}
-        {%if mensaje %}
-             <div class="alert alert-danger" role="alert">
-                {{ mensaje }}
-             </div>
-        {% endif %}
-    {% endwith %}
-
      <div id="añadirContenido">
          <div class="row">
              <div class="col-lg">
