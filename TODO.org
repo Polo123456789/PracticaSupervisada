@@ -61,7 +61,7 @@
    clases ya tienen el id del maestro, haciendo la tabla "ClasesAsignadas"
    redundante.
 
-* Estructura del BackEnd [5/6] [83%]
+* Estructura del BackEnd [5/7] [71%]
 ** DONE Definir rutas basicas
    CLOSED: [2020-08-06 jue. 18:48]
 ** TODO Hashes para los passwords [66%] [2/3]
@@ -92,3 +92,25 @@
    CLOSED: [2020-08-09 dom. 17:15]
    No forma parte exclusiva del backend, pero se añadio el diseño de una funcion
    para verificar que no se pasen entradas vacias
+** TODO Diseño backend admin (Donde administra los usuarios) [3/5] [60%]
+**** DONE Homepage
+     CLOSED: [2020-08-09 dom. 16:31]
+**** TODO Alumnos [1/2]
+***** DONE Crear
+      CLOSED: [2020-08-09 dom. 16:31]
+***** TODO Actualizar
+**** DONE Maestros [2/2]
+     CLOSED: [2020-08-10 lun. 18:49]
+***** DONE Crear
+      CLOSED: [2020-08-10 lun. 18:49]
+***** DONE Actualizar
+      CLOSED: [2020-08-10 lun. 18:49]
+**** DONE Grados [2/2]
+     CLOSED: [2020-08-10 lun. 18:48]
+***** DONE Crear
+      CLOSED: [2020-08-10 lun. 18:48]
+***** DONE Actualizar
+      CLOSED: [2020-08-10 lun. 18:48]
+**** TODO Clases [0/1]
+***** TODO Crear
+
