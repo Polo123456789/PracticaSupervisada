@@ -9,7 +9,7 @@
         <table class="table">
             <tr>
                 <th>Grado</th>
-                <th><input id="Caja" type="text" name="grado" onkeyup="verificar('Caja')" value="{{ grado.Grado }}" /></th>
+                <th><input id="Caja" type="text" name="grado" value="{{ grado.Grado }}" required/></th>
             </tr>
         </table>
         <input id="Subir" type="submit" value="Modificar Grado" disabled/>
@@ -20,19 +20,4 @@
     </h1>
     {% endif %}
 
-{% endblock %}
-
-{% block script %}
-    <script>
-    function verificar(item) {
-         boton = document.getElementById("Subir")
-         caja = document.getElementById(item)
-
-         if (caja.value == "") {
-             boton.disabled = true
-         } else {
-             boton.disabled = false
-        }
-    }
-    </script>
 {% endblock %}

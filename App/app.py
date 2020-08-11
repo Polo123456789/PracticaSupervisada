@@ -234,7 +234,8 @@ def gestionUsuariosAnadirA():
     if request.method == "POST":
         return redirect("/gestionDeUsuarios")
     else:
-        return render_template("anadirA.html", type=session["type"])
+        grados = Grado.query.all()
+        return render_template("anadirA.html", type=session["type"], grados=grados)
 
 @app.route("/gestionDeUsuarios/anadirM", methods=["GET", "POST"])
 def gestionUsuariosAnadirM():

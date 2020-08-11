@@ -1,6 +1,7 @@
 {% extends "base.html" %}
 
 {% block contenido %}
+    <br>
     <h1>Alumnos</h1>
     <p> Ingrese los datos del alumno</p>
 
@@ -8,30 +9,50 @@
         <table class="table">
             <tr>
                 <th>Nombre de Usuario</th>
-                <th><input type="text" name="nombreUsuario"/></th>
+                <th><input type="text" name="nombreUsuario" id="nombreUsuario" required/></th>
             </tr>
             <tr>
                 <th>Contraseña</th>
-                <th><input type="password" name="contrasena"/></th>
+                <th><input type="text" name="contrasena" id="contrasena" required/></th>
             </tr>
             <tr>
                 <th>Nombre</th>
-                <th><input type="text" name="nombre"/></th>
+                <th><input type="text" name="nombre" id="nombre" required/></th>
             </tr>
             <tr>
                 <th>Correo Electronico</th>
-                <th><input type="email" name="correoElectronico"/></th>
+                <th><input type="email" name="correoElectronico" id="correoElectronico" required /></th>
             </tr>
             <tr>
                 <th>Telefono de los padres</th>
-                <th><input type="text" name="telefonoPadres"/></th>
+                <th><input type="text" name="telefonoPadres" id="telefonoPadres" required/></th>
             </tr>
             <tr>
                 <th>Id Grado</th>
-                <th><input type="number" name="idGrado"/></th>
+                <th><input type="number" name="idGrado" id="idGrado" required/></th>
             </tr>
         </table>
-        <input type="submit" value="Añadir alumno"/>
+        <input type="submit" value="Añadir alumno" id="boton" />
     </form>
-
+    <br>
+    <h4>Grados</h4>
+    <p>Estos son los grados en los que puede estar el alumno</p>
+    <table class="table">
+        {% for grado in grados %}
+        <tr>
+            <th>{{ grado.Id }}</th>
+            <th>{{ grado.Grado }}</th>
+            <th><button type="button" class="btn btn-dark" onclick="setId({{ grado.Id }});">Usar este grado</button></th>
+        </tr>
+    {% endfor %}
+    </table>
 {% endblock %}
+
+{% block script%}
+    <script>
+     function setId(id) {
+         document.getElementById("idGrado").value = id
+     }
+    </script>
+{% endblock %}
+

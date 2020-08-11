@@ -14,25 +14,11 @@
         <table class="table">
             <tr>
                 <th>Grado</th>
-                <th><input id="Caja" type="text" name="grado" onkeyup="verificar('Caja')" /></th>
+                <th><input id="Caja" type="text" name="grado" required/></th>
             </tr>
         </table>
-        <input id="Subir" type="submit" value="Añadir Grado" disabled/>
+        <input id="Subir" type="submit" value="Añadir Grado" />
     </form>
 
 {% endblock %}
 
-{% block script %}
-    <script>
-    function verificar(item) {
-         boton = document.getElementById("Subir")
-         caja = document.getElementById(item)
-
-         if (caja.value == "") {
-             boton.disabled = true
-         } else {
-             boton.disabled = false
-        }
-    }
-    </script>
-{% endblock %}

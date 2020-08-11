@@ -11,7 +11,7 @@
         <table class="table">
             <tr>
                 <th>Nombre de Usuario</th>
-                <th><input type="text" name="nombreUsuario" value="{{ maestro.NombreUsuario }}" /></th>
+                <th><input type="text" name="nombreUsuario" value="{{ maestro.NombreUsuario }}" required/></th>
             </tr>
             <tr>
                 <th>Contraseña</th>
@@ -19,11 +19,11 @@
             </tr>
             <tr>
                 <th>Nombre</th>
-                <th><input type="text" name="nombre" value="{{ maestro.Nombre }}" /></th>
+                <th><input type="text" name="nombre" value="{{ maestro.Nombre }}" required/></th>
             </tr>
             <tr>
                 <th>Correo Electronico</th>
-                <th><input type="email" name="correoElectronico" value="{{ maestro.CorreoElectronico }}" /></th>
+                <th><input type="email" name="correoElectronico" value="{{ maestro.CorreoElectronico }}" required/></th>
             </tr>
             <tr>
                 <th>Administador</th>
