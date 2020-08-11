@@ -1,0 +1,21 @@
+{% extends "base.html" %}
+
+{% block contenido %}
+<br>
+<h1>Alumno</h1>
+<p>Esta es la lista de alumnos. Presione editar para cambiar los datos de los alumnos</p>
+<table class="table">
+    <tr>
+        <th>Id</th>
+        <th>Grado</th>
+        <th></th>
+    </tr>
+    {% for grado in grados %}
+    <tr>
+        <td>{{ grado.Id }}</th>
+        <td>{{ grado.Grado }}</th>
+        <td><a class="btn btn-secondary" href="/gestionDeUsuarios/actualizarG/{{ grado.Id }}">Modificar</a></th>
+    </tr>
+    {% endfor %}
+</table>
+{% endblock %}

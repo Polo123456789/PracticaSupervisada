@@ -67,7 +67,7 @@ class Tareas(db.Model):
 # Login y home page
 @app.route("/")
 def index():
-    return render_template("homePage.html")
+    return render_template("index.html")
 
 @app.route("/login")
 def loginVacio():
@@ -232,7 +232,27 @@ def gestionUsuariosAnadirA():
         return redirect("/404")
 
     if request.method == "POST":
-        return redirect("/gestionDeUsuarios")
+        nombreUsuario = request.form.get("nombreUsuario")
+        if Alumno.query.filter_by(NombreUsuario=nombreUsuario).first() == None:
+            contrasena        = request.form.get("contrasena")
+            nombre            = request.form.get("nombre")
+            correoElectronico = request.form.get("correoElectronico")
+            telefonoPadres    = request.form.get("telefonoPadres")
+            idGrado           = request.form.get("idGrado")
+            alumno = Alumno()
+            alumno.NombreUsuario     = nombreUsuario
+            alumno.Contrasena        = hash.hash_passwd(contrasena)
+            alumno.Nombre            = nombre
+            alumno.CorreoElectronico = correoElectronico
+            alumno.TelefonoPadres    = telefonoPadres
+            alumno.IdGrado           = idGrado
+            db.session.add(alumno)
+            db.session.commit()
+            return redirect("/gestionDeUsuarios")
+        else:
+            flash(f"El usuario {nombreUsuario} ya existe")
+            return redirect("/gestionDeUsuarios/anadirA")
+
     else:
         grados = Grado.query.all()
         return render_template("anadirA.html", type=session["type"], grados=grados)
@@ -248,10 +268,10 @@ def gestionUsuariosAnadirM():
     if request.method == "POST":
         nombreUsuario = request.form.get("nombreUsuario")
         if Maestro.query.filter_by(NombreUsuario=nombreUsuario).first() == None:
-            contra =   request.form.get("contrasena")
-            nombre =   request.form.get("nombre")
+            contra  =  request.form.get("contrasena")
+            nombre  =  request.form.get("nombre")
             correoE =  request.form.get("correoElectronico")
-            admin =    request.form.get("admin")
+            admin   =  request.form.get("admin")
             maestro = Maestro()
             maestro.NombreUsuario     = nombreUsuario
             maestro.Contrasena        = hash.hash_passwd(contra)

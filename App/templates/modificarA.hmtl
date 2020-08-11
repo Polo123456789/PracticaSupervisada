@@ -1,0 +1,67 @@
+{% extends "base.html" %}
+
+{% block contenido %}
+    <br>
+    <h1>Alumnos</h1>
+    <p> Ingrese los datos del alumno</p>
+
+    {% if alumno %}
+    <form action="/gestionDeUsuarios/anadirA" method="post">
+        <table class="table">
+            <tr>
+                <th>Nombre de Usuario</th>
+                <th><input type="text" name="nombreUsuario" id="nombreUsuario" 
+                    value="{{ alumno.NombreUsuario }}" required/></th>
+            </tr>
+            <tr>
+                <th>Contraseña</th>
+                <th><input type="text" name="contrasena" id="contrasena"/></th>
+            </tr>
+            <tr>
+                <th>Nombre</th>
+                <th><input type="text" name="nombre" id="nombre" value="{{ alumno.Nombre }}" required/></th>
+            </tr>
+            <tr>
+                <th>Correo Electronico</th>
+                <th><input type="email" name="correoElectronico" id="correoElectronico" 
+                    value="{{ alumno.CorreoElectronico }}" required /></th>
+            </tr>
+            <tr>
+                <th>Telefono de los padres</th>
+                <th><input type="text" name="telefonoPadres" id="telefonoPadres" 
+                    value="{{ alumno.TelefonoPadres }}" required/></th>
+            </tr>
+            <tr>
+                <th>Id Grado</th>
+                <th><input type="number" name="idGrado" id="idGrado" value="{{ alumno.IdGrado }}" required/></th>
+            </tr>
+        </table>
+        <input type="submit" value="Añadir alumno" id="boton" />
+    </form>
+    <br>
+    <h4>Grados</h4>
+    <p>Estos son los grados en los que puede estar el alumno</p>
+    <table class="table">
+        {% for grado in grados %}
+        <tr>
+            <td>{{ grado.Id }}</th>
+            <td>{{ grado.Grado }}</th>
+            <td><button type="button" class="btn btn-dark" onclick="setId({{ grado.Id }});">Usar este grado</button></th>
+        </tr>
+    {% endfor %}
+    </table>
+    {% else %}
+    <h1>
+        No se que estas haciendo, pero para ya!
+    </h1>
+    {% endif %}
+{% endblock %}
+
+{% block script%}
+    <script>
+        function setId(id) {
+            document.getElementById("idGrado").value = id
+        }
+    </script>
+{% endblock %}
+
