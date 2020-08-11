@@ -43,7 +43,7 @@
       CLOSED: [2020-08-10 lun. 18:48]
 ***** DONE Actualizar
       CLOSED: [2020-08-10 lun. 18:48]
-**** TODO Clases [0/1]
+**** TODO Clases [0/2]
 ***** TODO Crear
 
 * Diseño de la base de datos [3/3] [100%]
