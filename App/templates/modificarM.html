@@ -1,0 +1,46 @@
+{% extends "base.html" %}
+
+{% block contenido %}
+    <h1>Maestros</h1>
+    <p> Ingrese los datos del maestro.</p>
+    <p><strong>Nota:</strong> Si lo marca la caja admin, le dara acceso total al usuario para ver y alterar los datos en la base de datos</p>
+    <p><strong>Nota:</strong> Si no va a cambiar la contraseña, deje la caja en blanco</p>
+
+    {% if maestro %}
+    <form action="/gestionDeUsuarios/actualizarM/{{ maestro.Id }}" method="post">
+        <table class="table">
+            <tr>
+                <th>Nombre de Usuario</th>
+                <th><input type="text" name="nombreUsuario" value="{{ maestro.NombreUsuario }}" /></th>
+            </tr>
+            <tr>
+                <th>Contraseña</th>
+                <th><input type="text" name="contrasena" value="" /></th>
+            </tr>
+            <tr>
+                <th>Nombre</th>
+                <th><input type="text" name="nombre" value="{{ maestro.Nombre }}" /></th>
+            </tr>
+            <tr>
+                <th>Correo Electronico</th>
+                <th><input type="email" name="correoElectronico" value="{{ maestro.CorreoElectronico }}" /></th>
+            </tr>
+            <tr>
+                <th>Administador</th>
+                <th><input type="checkbox" name="admin"
+                           {% if maestro.Admin %}
+                               checked="on"
+                           {% else %}
+                               checked="off"
+                           {% endif %}
+                    /></th>
+            </tr>
+        </table>
+        <input type="submit" value="Modificar"/>
+    </form>
+    {% else %}
+    <h1>
+        No se que haces, pero si te pones a trastear mas, vas a romper el sitio.
+    </h1>
+    {% endif %}
+{% endblock %}

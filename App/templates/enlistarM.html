@@ -1,0 +1,26 @@
+{% extends "base.html" %}
+
+{% block contenido %}
+<h1>Maestros</h1>
+<p>Esta es la lista de maestros. Presione editar para cambiar los datos del maestro</p>
+<table class="table">
+    <tr>
+        <th>Id</th>
+        <th>Nombre de usuario</th>
+        <th>Nombre</th>
+        <th>Correo Electronico</th>
+        <th>Admin</th>
+        <th></th>
+    </tr>
+    {% for maestro in maestros %}
+    <tr>
+        <th>{{ maestro.Id }}</th>
+        <th>{{ maestro.NombreUsuario }}</th>
+        <th>{{ maestro.Nombre }}</th>
+        <th>{{ maestro.CorreoElectronico }}</th>
+        <th>{{ maestro.Admin }}</th>
+        <th><a class="btn btn-secondary" href="/gestionDeUsuarios/actualizarM/{{ maestro.Id }}">Modificar</a></th>
+    </tr>
+    {% endfor %}
+</table>
+{% endblock %}

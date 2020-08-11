@@ -1,4 +1,5 @@
 import hash
+import logging
 from flask import Flask, render_template, session, redirect, request, url_for\
     , flash
 from flask_sqlalchemy import SQLAlchemy
@@ -8,6 +9,12 @@ app = Flask(__name__)
 app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///tmp/test.db'
 app.secret_key = "NoDeveriasVerEsto,PeroNoEstamosEnProduccionAsiQueNoImporta"
 db = SQLAlchemy(app)
+
+logging.basicConfig(level=logging.DEBUG)
+# Ejemplo de un log
+# app.logger.info(type(admin))
+# app.logger.info(admin)
+
 
 """---- Base de datos -----"""
 class Grado(db.Model):
@@ -150,6 +157,7 @@ def gestionUsuarios():
     if not "type" in session:
         return redirect("/404")
     if session["type"] != "Admin":
+        flash("Cuidado, que tengo tu IP")
         return redirect("/404")
 
     return render_template("gestionU.html", type=session["type"])
@@ -159,6 +167,7 @@ def gestionUsuariosActualizarA(id):
     if not "type" in session:
         return redirect("/404")
     if session["type"] != "Admin":
+        flash("Cuidado, que tengo tu IP")
         return redirect("/404")
 
     return "AC"
@@ -168,31 +177,58 @@ def gestionUsuariosActualizarM(id):
     if not "type" in session:
         return redirect("/404")
     if session["type"] != "Admin":
+        flash("Cuidado, que tengo tu IP")
         return redirect("/404")
 
-    return "AC"
+    if request.method == "POST":
+        if id != 0:
+            nMaestro = Maestro.query.get(id)
+            contra = request.form.get("contrasena")
+            if contra != "":
+                nMaestro.Contrasena = hash.hash_passwd(contra)
+            nMaestro.NombreUsuario     = request.form.get("nombreUsuario")
+            nMaestro.Nombre            = request.form.get("nombre")
+            nMaestro.CorreoElectronico = request.form.get("correoElectronico")
+            nMaestro.Admin             = request.form.get("admin") == "on"
+            db.session.commit()
+
+        return redirect("/gestionDeUsuarios/actualizarM/0")
+
+    else:
+        if id == 0:
+            maestros = Maestro.query.all()
+            return render_template("enlistarM.html", type=session["type"], maestros=maestros)
+        else:
+            maestro = Maestro.query.get(id)
+            return render_template("modificarM.html", type=session["type"], maestro=maestro)
 
 @app.route("/gestionDeUsuarios/actualizarG/<int:id>", methods=["GET", "POST"])
 def gestionUsuariosActualizarG(id):
     if not "type" in session:
         return redirect("/404")
     if session["type"] != "Admin":
-        flash("No es administrador")
+        flash("Cuidado, que tengo tu IP")
         return redirect("/404")
     if request.method == "POST":
-        return redirect("/gestionDeUsuarios/actualizarG/-1")
+        if id != 0:
+            nGrado = Grado.query.get(id)
+            nGrado.Grado = request.form.get("grado")
+            db.session.commit()
+        return redirect("/gestionDeUsuarios/actualizarG/0")
     else:
         if id == 0:
             grados = Grado.query.all()
-            return render_template("enlistarG.html", grados=grados)
+            return render_template("enlistarG.html", type=session["type"], grados=grados)
         else:
-            return f"id: {id}"
+            grado = Grado.query.get(id)
+            return render_template("modificarG.html", type=session["type"], grado=grado)
 
 @app.route("/gestionDeUsuarios/anadirA", methods=["GET", "POST"])
 def gestionUsuariosAnadirA():
     if not "type" in session:
         return redirect("/404")
     if session["type"] != "Admin":
+        flash("Cuidado, que tengo tu IP")
         return redirect("/404")
 
     if request.method == "POST":
@@ -205,10 +241,32 @@ def gestionUsuariosAnadirM():
     if not "type" in session:
         return redirect("/404")
     if session["type"] != "Admin":
+        flash("Cuidado, que tengo tu IP")
         return redirect("/404")
 
     if request.method == "POST":
+        nombreUsuario = request.form.get("nombreUsuario")
+        if Maestro.query.filter_by(NombreUsuario=nombreUsuario).first() == None:
+            contra =   request.form.get("contrasena")
+            nombre =   request.form.get("nombre")
+            correoE =  request.form.get("correoElectronico")
+            admin =    request.form.get("admin")
+
+            maestro = Maestro()
+            maestro.NombreUsuario     = nombreUsuario
+            maestro.Contrasena        = hash.hash_passwd(contra)
+            maestro.Nombre            = nombre
+            maestro.CorreoElectronico = correoE
+            maestro.Admin             = (admin=="on")
+
+            db.session.add(maestro)
+            db.session.commit()
+
+        else:
+            flash(f"El nombre de ususario '{nombreUsuario}' ya esta ocupado")
+
         return redirect("/gestionDeUsuarios")
+
     else:
         return render_template("anadirM.html", type=session["type"])
 
@@ -217,6 +275,7 @@ def gestionUsuariosAnadirG():
     if not "type" in session:
         return redirect("/404")
     if session["type"] != "Admin":
+        flash("Cuidado, que tengo tu IP")
         return redirect("/404")
 
     if request.method == "POST":
@@ -234,9 +293,11 @@ def gestionUsuariosAnadirG():
 
 @app.route("/gestionDeUsuarios/anadirC", methods=["GET", "POST"])
 def gestionUsuariosAnadirC():
-    if "type" in session:
-        if session["type"] == "Admin":
-            return "Gestion de usuarios"
+    if not "type" in session:
+        return redirect("/404")
+    if session["type"] != "Admin":
+        flash("Cuidado, que tengo tu IP")
+        return redirect("/404")
 
     if request.method == "POST":
         return redirect("/gestionDeUsuarios")
@@ -248,6 +309,7 @@ def eliminar(tipo, id):
     if not "type" in session:
         return redirect("/404")
     if session["type"] != "Admin":
+        flash("Cuidado, que tengo tu IP")
         return redirect("/404")
 
     return "Eliminar"
@@ -257,6 +319,7 @@ def mantenimiento():
     if not "type" in session:
         return redirect("/404")
     if session["type"] != "Admin":
+        flash("Cuidado, que tengo tu IP")
         return redirect("/404")
 
     return "Mantenimiento"

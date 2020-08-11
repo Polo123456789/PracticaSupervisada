@@ -1,0 +1,38 @@
+{% extends "base.html" %}
+
+{% block contenido %}
+    <h1>Grado</h1>
+    <p>Puede cambiar el nombre del grado</p>
+
+    {% if grado %}
+    <form action="/gestionDeUsuarios/actualizarG/{{ grado.Id }}" method="post">
+        <table class="table">
+            <tr>
+                <th>Grado</th>
+                <th><input id="Caja" type="text" name="grado" onkeyup="verificar('Caja')" value="{{ grado.Grado }}" /></th>
+            </tr>
+        </table>
+        <input id="Subir" type="submit" value="Modificar Grado" disabled/>
+    </form>
+    {% else %}
+    <h1>
+        No se que haces, pero si te pones a trastear mas, vas a romper el sitio
+    </h1>
+    {% endif %}
+
+{% endblock %}
+
+{% block script %}
+    <script>
+    function verificar(item) {
+         boton = document.getElementById("Subir")
+         caja = document.getElementById(item)
+
+         if (caja.value == "") {
+             boton.disabled = true
+         } else {
+             boton.disabled = false
+        }
+    }
+    </script>
+{% endblock %}

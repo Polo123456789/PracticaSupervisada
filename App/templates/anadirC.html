@@ -1,0 +1,48 @@
+{% extends "base.html" %}
+
+{% block contenido %}
+
+    <form action="/gestionDeUsuarios/anadirA" method="post">
+        <table class="table">
+            <tr>
+                <th>Nombre de Usuario</th>
+                <th><input type="text" name="nombreUsuario"/></th>
+            </tr>
+            <tr>
+                <th>Contraseña</th>
+                <th><input type="password" name="contrasena"/></th>
+            </tr>
+            <tr>
+                <th>Nombre</th>
+                <th><input type="text" name="nombre"/></th>
+            </tr>
+            <tr>
+                <th>Correo Electronico</th>
+                <th><input type="email" name="correoElectronico"/></th>
+            </tr>
+            <tr>
+                <th>Telefono de los padres</th>
+                <th><input type="text" name="telefonoPadres"/></th>
+            </tr>
+            <tr>
+                <th>Id Grado</th>
+                <th><input type="number" name="idGrado"/></th>
+            </tr>
+        </table>
+        <input type="submit" value="Añadir alumno"/>
+    </form>
+    <p>Esta es la lista de grados disponibles para asignar las clases.</p>
+    <table class="table">
+        <tr>
+            <th>Id</th>
+            <th>Grado</th>
+            <th></th>
+        </tr>
+        {% for grado in grados %}
+        <tr>
+            <th>{{ grado.Id }}</th>
+            <th>{{ grado.Grado }}</th>
+        </tr>
+        {% endfor %}
+    </table>
+{% endblock %}
