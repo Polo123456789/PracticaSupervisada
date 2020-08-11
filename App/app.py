@@ -252,22 +252,18 @@ def gestionUsuariosAnadirM():
             nombre =   request.form.get("nombre")
             correoE =  request.form.get("correoElectronico")
             admin =    request.form.get("admin")
-
             maestro = Maestro()
             maestro.NombreUsuario     = nombreUsuario
             maestro.Contrasena        = hash.hash_passwd(contra)
             maestro.Nombre            = nombre
             maestro.CorreoElectronico = correoE
             maestro.Admin             = (admin=="on")
-
             db.session.add(maestro)
             db.session.commit()
-
         else:
             flash(f"El nombre de ususario '{nombreUsuario}' ya esta ocupado")
 
         return redirect("/gestionDeUsuarios")
-
     else:
         return render_template("anadirM.html", type=session["type"])
 
@@ -303,7 +299,8 @@ def gestionUsuariosAnadirC():
     if request.method == "POST":
         return redirect("/gestionDeUsuarios")
     else:
-        return render_template("anadirC.html", type=session["type"])
+        grados = Grado.query.all()
+        return render_template("anadirC.html", type=session["type"], grados=grados)
 
 @app.route("/gestionDeUsuarios/Eliminar/<tipo>/<int:id>", methods=["GET", "POST"])
 def eliminar(tipo, id):

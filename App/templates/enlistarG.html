@@ -11,9 +11,9 @@
     </tr>
     {% for grado in grados %}
     <tr>
-        <th>{{ grado.Id }}</th>
-        <th>{{ grado.Grado }}</th>
-        <th><a class="btn btn-secondary" href="/gestionDeUsuarios/actualizarG/{{ grado.Id }}">Modificar</a></th>
+        <td>{{ grado.Id }}</th>
+        <td>{{ grado.Grado }}</th>
+        <td><a class="btn btn-secondary" href="/gestionDeUsuarios/actualizarG/{{ grado.Id }}">Modificar</a></th>
     </tr>
     {% endfor %}
 </table>

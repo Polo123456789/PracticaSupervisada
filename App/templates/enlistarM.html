@@ -14,12 +14,12 @@
     </tr>
     {% for maestro in maestros %}
     <tr>
-        <th>{{ maestro.Id }}</th>
-        <th>{{ maestro.NombreUsuario }}</th>
-        <th>{{ maestro.Nombre }}</th>
-        <th>{{ maestro.CorreoElectronico }}</th>
-        <th>{{ maestro.Admin }}</th>
-        <th><a class="btn btn-secondary" href="/gestionDeUsuarios/actualizarM/{{ maestro.Id }}">Modificar</a></th>
+        <td>{{ maestro.Id }}</th>
+        <td>{{ maestro.NombreUsuario }}</th>
+        <td>{{ maestro.Nombre }}</th>
+        <td>{{ maestro.CorreoElectronico }}</th>
+        <td>{{ maestro.Admin }}</th>
+        <td><a class="btn btn-secondary" href="/gestionDeUsuarios/actualizarM/{{ maestro.Id }}">Modificar</a></th>
     </tr>
     {% endfor %}
 </table>
