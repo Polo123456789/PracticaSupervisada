@@ -6,7 +6,7 @@
     <p> Ingrese los datos del alumno</p>
 
     {% if alumno %}
-    <form action="/gestionDeUsuarios/anadirA" method="post">
+    <form action="/gestionDeUsuarios/actualizarA/{{ alumno.Id }}" method="post">
         <table class="table">
             <tr>
                 <th>Nombre de Usuario</th>

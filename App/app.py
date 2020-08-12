@@ -170,7 +170,33 @@ def gestionUsuariosActualizarA(id):
         flash("Cuidado, que tengo tu IP")
         return redirect("/404")
 
-    return "AC"
+    if request.method == "POST":
+        if id != 0:
+            alumno = Alumno.query.get(id)
+            nombreUsuario            = request.form.get("nombreUsuario")
+            contrasena               = request.form.get("contrasena")
+            nombre                   = request.form.get("nombre")
+            correoElectronico        = request.form.get("correoElectronico")
+            telefonoPadres           = request.form.get("telefonoPadres")
+            idGrado                  = request.form.get("idGrado")
+            alumno.NombreUsuario     = nombreUsuario
+            if contrasena != "":
+                alumno.Contrasena        = hash.hash_passwd(contrasena)
+            alumno.Nombre            = nombre
+            alumno.CorreoElectronico = correoElectronico
+            alumno.TelefonoPadres    = telefonoPadres
+            alumno.IdGrado           = idGrado
+            db.session.commit()
+        return redirect("/gestionDeUsuarios/actualizarA/0")
+
+    else:
+        if id == 0:
+            alumnos = Alumno.query.all()
+            return render_template("enlistarA.html", type=session["type"], alumnos=alumnos)
+        else:
+            alumno = Alumno.query.get(id)
+            return render_template("modificarA.html", type=session["type"], alumno=alumno)
+
 
 @app.route("/gestionDeUsuarios/actualizarM/<int:id>", methods=["GET", "POST"])
 def gestionUsuariosActualizarM(id):

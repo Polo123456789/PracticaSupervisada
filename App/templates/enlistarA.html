@@ -7,14 +7,22 @@
 <table class="table">
     <tr>
         <th>Id</th>
-        <th>Grado</th>
+        <th>Nombre Usuario</th>
+        <th>Nombre</th>
+        <th>Correo Electronico</th>
+        <th>Telefono de Padres</th>
+        <th>IdGrado</th>
         <th></th>
     </tr>
-    {% for grado in grados %}
+    {% for alumno in alumnos %}
     <tr>
-        <td>{{ grado.Id }}</th>
-        <td>{{ grado.Grado }}</th>
-        <td><a class="btn btn-secondary" href="/gestionDeUsuarios/actualizarG/{{ grado.Id }}">Modificar</a></th>
+        <td>{{ alumno.Id }}</td>
+        <td>{{ alumno.NombreUsuario }}</td>
+        <td>{{ alumno.Nombre }}</td>
+        <td>{{ alumno.CorreoElectronico }}</td>
+        <td>{{ alumno.TelefonoPadres }}</td>
+        <td>{{ alumno.IdGrado }}</td>
+        <td><a class="btn btn-secondary" href="/gestionDeUsuarios/actualizarA/{{ alumno.Id }}">Modificar</a></td>
     </tr>
     {% endfor %}
 </table>
