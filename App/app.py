@@ -122,7 +122,7 @@ def tareas():
         if session["type"] == "Alumno":
             return "Ver mis tareas"
 
-    return redirect("/404")
+    return redirect("/")
 
 @app.route("/notas")
 def notas():
@@ -130,24 +130,26 @@ def notas():
         if session["type"] == "Alumno":
             return "Ver mis notas"
 
-    return redirect("/404")
+    return redirect("/")
 
 # Maestros
 @app.route("/crear_tareas", methods=["GET", "POST"])
 def crearTareas():
     if not "type" in session:
-        return redirect("/404")
+        return redirect("/")
     if session["type"] != "Admin" and session["type"] != "Profe":
-        return redirect("/404")
+        flash("Cuidado mano, que tengo tu ip")
+        return redirect("/")
 
     return "Crear tareas"
 
 @app.route("/calificar", methods=["GET", "POST"])
 def calificar():
     if not "type" in session:
-        return redirect("/404")
+        return redirect("/")
     if session["type"] != "Admin" and session["type"] != "Profe":
-        return redirect("/404")
+        flash("Cuidado mano, que tengo tu ip")
+        return redirect("/")
 
     return "Calificar"
 
@@ -155,20 +157,20 @@ def calificar():
 @app.route("/gestionDeUsuarios", methods=["GET", "POST"])
 def gestionUsuarios():
     if not "type" in session:
-        return redirect("/404")
+        return redirect("/")
     if session["type"] != "Admin":
         flash("Cuidado, que tengo tu IP")
-        return redirect("/404")
+        return redirect("/")
 
     return render_template("gestionU.html", type=session["type"])
 
 @app.route("/gestionDeUsuarios/actualizarA/<int:id>", methods=["GET", "POST"])
 def gestionUsuariosActualizarA(id):
     if not "type" in session:
-        return redirect("/404")
+        return redirect("/")
     if session["type"] != "Admin":
         flash("Cuidado, que tengo tu IP")
-        return redirect("/404")
+        return redirect("/")
 
     if request.method == "POST":
         if id != 0:
@@ -201,10 +203,10 @@ def gestionUsuariosActualizarA(id):
 @app.route("/gestionDeUsuarios/actualizarM/<int:id>", methods=["GET", "POST"])
 def gestionUsuariosActualizarM(id):
     if not "type" in session:
-        return redirect("/404")
+        return redirect("/")
     if session["type"] != "Admin":
         flash("Cuidado, que tengo tu IP")
-        return redirect("/404")
+        return redirect("/")
 
     if request.method == "POST":
         if id != 0:
@@ -231,10 +233,10 @@ def gestionUsuariosActualizarM(id):
 @app.route("/gestionDeUsuarios/actualizarG/<int:id>", methods=["GET", "POST"])
 def gestionUsuariosActualizarG(id):
     if not "type" in session:
-        return redirect("/404")
+        return redirect("/")
     if session["type"] != "Admin":
         flash("Cuidado, que tengo tu IP")
-        return redirect("/404")
+        return redirect("/")
     if request.method == "POST":
         if id != 0:
             nGrado = Grado.query.get(id)
@@ -252,10 +254,10 @@ def gestionUsuariosActualizarG(id):
 @app.route("/gestionDeUsuarios/anadirA", methods=["GET", "POST"])
 def gestionUsuariosAnadirA():
     if not "type" in session:
-        return redirect("/404")
+        return redirect("/")
     if session["type"] != "Admin":
         flash("Cuidado, que tengo tu IP")
-        return redirect("/404")
+        return redirect("/")
 
     if request.method == "POST":
         nombreUsuario = request.form.get("nombreUsuario")
@@ -286,10 +288,10 @@ def gestionUsuariosAnadirA():
 @app.route("/gestionDeUsuarios/anadirM", methods=["GET", "POST"])
 def gestionUsuariosAnadirM():
     if not "type" in session:
-        return redirect("/404")
+        return redirect("/")
     if session["type"] != "Admin":
         flash("Cuidado, que tengo tu IP")
-        return redirect("/404")
+        return redirect("/")
 
     if request.method == "POST":
         nombreUsuario = request.form.get("nombreUsuario")
@@ -316,10 +318,10 @@ def gestionUsuariosAnadirM():
 @app.route("/gestionDeUsuarios/anadirG", methods=["GET", "POST"])
 def gestionUsuariosAnadirG():
     if not "type" in session:
-        return redirect("/404")
+        return redirect("/")
     if session["type"] != "Admin":
         flash("Cuidado, que tengo tu IP")
-        return redirect("/404")
+        return redirect("/")
 
     if request.method == "POST":
         nombre = request.form.get('grado')
@@ -337,41 +339,52 @@ def gestionUsuariosAnadirG():
 @app.route("/gestionDeUsuarios/anadirC", methods=["GET", "POST"])
 def gestionUsuariosAnadirC():
     if not "type" in session:
-        return redirect("/404")
+        return redirect("/")
     if session["type"] != "Admin":
         flash("Cuidado, que tengo tu IP")
-        return redirect("/404")
+        return redirect("/")
 
     if request.method == "POST":
+        nombre = request.form.get("Nombre")
+        idGrado = request.form.get("IdGrado")
+        idMaestro = request.form.get("IdMaestro")
+        if Clases.query.filter_by(Nombre=nombre).first() == None:
+            clase = Clases()
+            clase.Nombre    = nombre 
+            clase.IdGrado   = idGrado
+            clase.IdMaestro = idMaestro
+            app.logger.info(request.form.get("IdGrado"))
+            db.session.add(clase)
+            db.session.commit()
+
+        else:
+            flash(f"La clase con el nombre {nombre} ya existe")
         return redirect("/gestionDeUsuarios")
     else:
         grados = Grado.query.all()
-        return render_template("anadirC.html", type=session["type"], grados=grados)
+        maestros = Maestro.query.all()
+        return render_template("anadirC.html", type=session["type"], grados=grados, maestros=maestros)
 
 @app.route("/gestionDeUsuarios/Eliminar/<tipo>/<int:id>", methods=["GET", "POST"])
 def eliminar(tipo, id):
     if not "type" in session:
-        return redirect("/404")
+        return redirect("/")
     if session["type"] != "Admin":
         flash("Cuidado, que tengo tu IP")
-        return redirect("/404")
+        return redirect("/")
 
     return "Eliminar"
 
 @app.route("/mantenimiento", methods=["GET", "POST"])
 def mantenimiento():
     if not "type" in session:
-        return redirect("/404")
+        return redirect("/")
     if session["type"] != "Admin":
         flash("Cuidado, que tengo tu IP")
-        return redirect("/404")
+        return redirect("/")
 
     return "Mantenimiento"
 
-
-@app.route("/404")
-def noPage():
-    return "Que haces para llegar aca? Esta pagina no existe"
 
 if __name__ == "__main__":
     app.run()

@@ -2,21 +2,65 @@
 
 {% block contenido %}
     <br>
-    <form action="/gestionDeUsuarios/anadirC" method="post">
+    <h1>Clases</h1>
+    <p>Indique el nombre de la clase, y seleccione el grado y maestro correspondiente</p>
+    <form action="/gestionDeUsuarios/anadirC" method="post" class="form">
+        <table class="table">
+            <tr>
+                <th>Nombre</th>
+                <th><input id="Nombre" name="Nombre" type="text" required/></th>
+            </tr>
+            <tr>
+                <th>IdGrado</th>
+                <th><input id="IdGrado" name="IdGrado" type="numeric" required/></th>
+            </tr>
+            <tr>
+                <th>IdMaestro</th>
+                <th><input id="IdMaestro" name="IdMaestro" type="numeric" required/></th>
+            </tr>
+    </table>
+
         <input type="submit" value="Añadir Clase"/>
     </form>
+    <br>
+    <h3>Grados</h3>
     <p>Esta es la lista de grados disponibles para asignar las clases.</p>
     <table class="table">
         <tr>
-            <th>Id</th>
             <th>Grado</th>
             <th></th>
         </tr>
         {% for grado in grados %}
         <tr>
-            <td>{{ grado.Id }}</th>
-            <td>{{ grado.Grado }}</th>
+            <td>{{ grado.Grado }}</td>
+            <td><button type="button" class="btn btn-dark" onclick="setIdGrado({{ grado.Id }});">Usar este grado</button></td>
         </tr>
         {% endfor %}
     </table>
+    <h3>Maestros</h3>
+    <p>Esta es la lista de maestros que pueden tomar la responsabilidad por la clase</p>
+    <table class="table">
+        <tr>
+            <th>Maestro</th>
+            <th></th>
+        </tr>
+        {% for maestro in maestros %}
+        <tr>
+            <td>{{ maestro.Nombre }}</td>
+            <td><button type="button" class="btn btn-dark" onclick="setIdMaestro({{ maestro.Id }});">Usar este maestro</button></td>
+        </tr>
+        {% endfor %}
+        </table>
+        
+{% endblock %}
+
+{% block script%}
+    <script>
+     function setIdGrado(id) {
+         document.getElementById("IdGrado").value = id
+     }
+     function setIdMaestro(id) {
+         document.getElementById("IdMaestro").value = id
+     }
+    </script>
 {% endblock %}

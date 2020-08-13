@@ -40,7 +40,6 @@
     <table class="table">
         {% for grado in grados %}
         <tr>
-            <td>{{ grado.Id }}</th>
             <td>{{ grado.Grado }}</th>
             <td><button type="button" class="btn btn-dark" onclick="setId({{ grado.Id }});">Usar este grado</button></th>
         </tr>
