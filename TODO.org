@@ -63,6 +63,8 @@
 ** TODO Calificaicones de tareas
    Pospuesto ya que aun no hay forma de que los alumnos las entreguen
 
+** TODO Homepage del alumno
+   Tendra que ver la lista de tareas pendientes que tenga
 * Diseño de la base de datos [4/4] [100%]
 ** DONE Prototipo de la base de datos:
    CLOSED: [2020-08-06 jue. 13:58]
@@ -83,7 +85,7 @@
    eliminar el almacenamiento redundante de informacion
     [[file:DiseñoDB/DiseñoBaseDatos2.png]]
 
-* Estructura del BackEnd [7/8] [87%]
+* Estructura del BackEnd [10/11] [90%]
 ** DONE Definir rutas basicas
    CLOSED: [2020-08-06 jue. 18:48]
 ** TODO Hashes para los passwords [66%] [2/3]
@@ -143,4 +145,10 @@
 ** DONE Verificacion de la entrada de datos
    CLOSED: [2020-08-10 lun. 19:30]
    Se usa el atributo required para validar los forms
+** DONE Transferencia de archivos
+   CLOSED: [2020-08-17 lun. 16:22]
+** DONE Verificacion de la integridad de los archivos
+   CLOSED: [2020-08-17 lun. 16:22]
+** DONE Verificacion de los nombres de los archivos
+   CLOSED: [2020-08-17 lun. 16:22]
 

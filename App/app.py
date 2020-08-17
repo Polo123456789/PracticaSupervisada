@@ -101,6 +101,7 @@ def loginAlumno():
             return redirect("/login/alumno")
         if hash.check_passwd(passwd, original.Contrasena):
             session["type"] = "Alumno"
+            session["id"] = original.Id
             return redirect("/tareas")
         else:
             flash("Error al iniciar sesion")
@@ -134,21 +135,45 @@ def loginMaestro():
         return render_template("login.html", quien="maestro")
 
 # Alumnos
-@app.route("/tareas", methods=["GET", "POST"])
+@app.route("/tareas")
 def tareas():
-    if "type" in session:
-        if session["type"] == "Alumno":
-            return "Ver mis tareas"
+    if not "type" in session:
+        flash("Cuidado mano, que tengo tu ip")
+        return redirect("/")
+    if session["type"] != "Alumno":
+        flash("Cuidado mano, que tengo tu ip")
+        return redirect("/")
 
-    return redirect("/")
+    idAlumno = session["id"]
+    entregasPendientes = Entregas.query.filter_by(IdAlumno=idAlumno, Respuesta="SinRespuesta").all()
+    tareas = []
+    for entrega in entregasPendientes:
+        t = Tareas.query.get(entrega.IdTarea)
+        tareas.append(t)
+    return render_template("listaTareas.html", type=session["type"], tareas=tareas)
+
+@app.route("/tareas/<int:idTarea>", methods=["POST", "GET"])
+def ResolverTareas(idTarea):
+    if not "type" in session:
+        flash("Cuidado mano, que tengo tu ip")
+        return redirect("/")
+    if session["type"] != "Alumno":
+        flash("Cuidado mano, que tengo tu ip")
+        return redirect("/")
+
+    return f"{idTarea}"
 
 @app.route("/notas")
 def notas():
-    if "type" in session:
-        if session["type"] == "Alumno":
-            return "Ver mis notas"
+    if not "type" in session:
+        flash("Cuidado mano, que tengo tu ip")
+        return redirect("/")
+    if session["type"] != "Alumno":
+        flash("Cuidado mano, que tengo tu ip")
+        return redirect("/")
 
-    return redirect("/")
+    return "En desarrollo"
+
 
 # Maestros
 @app.route("/crear_tareas")
