@@ -11,7 +11,7 @@
 
 ** Backend
 
-* Diseño de la interfaz grafica [2/4] [50%]
+* Diseño de la interfaz grafica [3/4] [75%]
 ** DONE Prototipo del layout general
    CLOSED: [2020-08-06 jue. 12:32]
    #+ATTR_ORG: :width 300
@@ -51,13 +51,15 @@
 ***** DONE Crear
       CLOSED: [2020-08-12 mié. 18:50]
 
-** TODO Homepage del maestro [0/2]
-   DEADLINE: <2020-08-16 dom. 18:00> SCHEDULED: <2020-08-15 sáb.>
+** DONE Homepage del maestro [2/2]
+   CLOSED: [2020-08-17 lun. 12:11] DEADLINE: <2020-08-16 dom. 18:00> SCHEDULED: <2020-08-15 sáb.>
    Empezara en la ruta /crear_tareas. Se va a dar una lista de las clases
    de a las que puede enviar las tareas. 
-*** TODO Enlistar las clases del maestros
+*** DONE Enlistar las clases del maestros
+    CLOSED: [2020-08-17 lun. 12:10]
     Y que en estas pueda ir sumando las tareas
-*** TODO Template para la creacion de tareas
+*** DONE Template para la creacion de tareas
+    CLOSED: [2020-08-17 lun. 12:10]
 ** TODO Calificaicones de tareas
    Pospuesto ya que aun no hay forma de que los alumnos las entreguen
 

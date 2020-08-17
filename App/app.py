@@ -1,4 +1,5 @@
 import hash
+import os
 import logging
 from flask import Flask, render_template, session, redirect, request, url_for\
     , flash
@@ -184,20 +185,29 @@ def subirTareas(idClase):
     if request.method == "POST":
         titulo = request.form.get("titulo")
         descripcion = request.form.get("descripcion")
-        if 'file' in request.files:
-            file = request.files['file']
-            if file and allowed_file(file.filename):
-                filename = secure_filename(file.filename)
-                file.save(os.path.join(app.config['UPLOAD_FOLDER'], filename))
+        archivo = request.files['file']
+        app.logger.info(type(archivo))
+        if archivo.filename:
+            if allowed_file(archivo.filename):
+               filename = secure_filename(archivo.filename)
+               archivo.save(os.path.join(app.config['UPLOAD_FOLDER'], archivo.filename))
             else:
-                flash("Si no adjunto nada, adjunte un txt con la descripcion de la tarea.\
-                Error con el archivo adjunto.\
-                Le recordamos que solo pueden tener las siguientes extencionses:\
-                'txt', 'pdf', 'png', 'jpg', 'jpeg', 'gif', 'doc', 'docx', 'xls', 'zip', 'gz', 'ppt'.")
-                return redirect("/crear_tareas")
+               flash("Error con el archivo adjunto.\
+               Le recordamos que solo pueden tener las siguientes extencionses:\
+               'txt', 'pdf', 'png', 'jpg', 'jpeg', 'gif', 'doc', 'docx', 'xls', 'zip', 'gz', 'ppt'.")
+               return redirect("/crear_tareas")
         else:
-            filename = "None"
+            flash("Tarea sin adjuntos")
+            filename = "SinArchivo"
 
+        tarea = Tareas()
+        tarea.IdClase           = idClase
+        tarea.Titulo            = titulo
+        tarea.Descripcion       = descripcion
+        tarea.PathAdjuntos      = filename
+
+        db.session.add(tarea)
+        db.session.commit()
 
         return redirect("/crear_tareas")
     else:
