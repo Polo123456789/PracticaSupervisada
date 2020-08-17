@@ -4,10 +4,18 @@ from flask import Flask, render_template, session, redirect, request, url_for\
     , flash
 from flask_sqlalchemy import SQLAlchemy
 from sqlalchemy import exc
+from werkzeug.utils import secure_filename
 
 app = Flask(__name__)
+
 app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///tmp/test.db'
+app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
+
+app.config['UPLOAD_FOLDER'] = "userFiles/"
+ALLOWED_EXTENSIONS = {'txt', 'pdf', 'png', 'jpg', 'jpeg', 'gif', 'doc', 'docx', 'xls', 'zip', 'gz', 'ppt'}
+
 app.secret_key = "NoDeveriasVerEsto,PeroNoEstamosEnProduccionAsiQueNoImporta"
+
 db = SQLAlchemy(app)
 
 logging.basicConfig(level=logging.DEBUG)
@@ -15,6 +23,9 @@ logging.basicConfig(level=logging.DEBUG)
 # app.logger.info(type(admin))
 # app.logger.info(admin)
 
+def allowed_file(filename):
+    return '.' in filename and \
+           filename.rsplit('.', 1)[1].lower() in ALLOWED_EXTENSIONS
 
 """---- Base de datos -----"""
 class Grado(db.Model):
@@ -31,7 +42,7 @@ class Alumno(db.Model):
     CorreoElectronico = db.Column(db.String(30), nullable=False)
     TelefonoPadres    = db.Column(db.String(10), nullable=False)
     IdGrado           = db.Column(db.Integer, db.ForeignKey('grado.Id'), nullable=False)
-    tareas            = db.relationship("Tareas", backref="tareasPorAlumno")
+    entregas          = db.relationship("Entregas", backref="tareasEntregadasPorAlumno")
 
 class Maestro(db.Model):
     Id                = db.Column(db.Integer, primary_key=True)
@@ -51,17 +62,22 @@ class Clases(db.Model):
 
 class Tareas(db.Model):
     Id                = db.Column(db.Integer, primary_key=True)
-    IdAlumno          = db.Column(db.Integer, db.ForeignKey('alumno.Id'), nullable=False)
     IdClase           = db.Column(db.Integer, db.ForeignKey('clases.Id'), nullable=False)
     Titulo            = db.Column(db.String(30), nullable=False)
     Descripcion       = db.Column(db.String(120), nullable=False)
     PathAdjuntos      = db.Column(db.String(50), nullable=False)
+    entregas          = db.relationship("Entregas", backref="tareasEntregadas")
+
+class Entregas(db.Model):
+    Id                = db.Column(db.Integer, primary_key=True)
+    IdTarea           = db.Column(db.Integer, db.ForeignKey('tareas.Id'), nullable=False)
+    IdAlumno          = db.Column(db.Integer, db.ForeignKey('alumno.Id'), nullable=False)
+    PathAdjuntos      = db.Column(db.String(50), nullable=False)
+    Respuesta         = db.Column(db.String(300), nullable=False)
     Calificado        = db.Column(db.Boolean, nullable=False)
-    Nota              = db.Column(db.Float, nullable=True)
-    HoraLimite        = db.Column(db.DateTime, nullable=False)
-    Entregado         = db.Column(db.Boolean, nullable=False)
-    PathRespuesta     = db.Column(db.String(50), nullable=True)
-    HoraEntrega       = db.Column(db.DateTime, nullable=False)
+    Nota              = db.Column(db.Integer, nullable=False)
+
+
 
 """---- Rutas de la pagina web -----"""
 # Login y home page
@@ -102,12 +118,13 @@ def loginMaestro():
             flash("Ese nombre de usuario no existe")
             return redirect("/login/maestro")
         if hash.check_passwd(passwd, original.Contrasena):
+            session["id"] = original.Id
             if original.Admin:
                 session["type"] = "Admin"
                 return redirect("/gestionDeUsuarios")
             else:
                 session["type"] = "Profe"
-                return redirect("calificar")
+                return redirect("/crear_tareas")
         else:
             flash("Error al iniciar sesion")
             return redirect("/login/maestro")
@@ -133,19 +150,64 @@ def notas():
     return redirect("/")
 
 # Maestros
-@app.route("/crear_tareas", methods=["GET", "POST"])
+@app.route("/crear_tareas")
 def crearTareas():
     if not "type" in session:
+        flash("Cuidado mano, que tengo tu ip")
         return redirect("/")
     if session["type"] != "Admin" and session["type"] != "Profe":
         flash("Cuidado mano, que tengo tu ip")
         return redirect("/")
+    if not "id" in session:
+        flash("Ha ocurrido un error, y no hemos podido idedentificar su id\
+        , porfavor inicie sesion otra vez")
+        return redirect("/login/maestro")
+
+    clases = Clases.query.filter_by(IdMaestro=session["id"])
+    return render_template("listaClases.html", clases=clases, type=session['type'])
 
     return "Crear tareas"
+
+@app.route("/crear_tareas/<int:idClase>", methods=["GET", "POST"])
+def subirTareas(idClase):
+    if not "type" in session:
+        flash("Cuidado mano, que tengo tu ip")
+        return redirect("/")
+    if session["type"] != "Admin" and session["type"] != "Profe":
+        flash("Cuidado mano, que tengo tu ip")
+        return redirect("/")
+    if not "id" in session:
+        flash("Ha ocurrido un error, y no hemos podido idedentificar su id\
+        , porfavor inicie sesion otra vez")
+        return redirect("/login/maestro")
+
+    if request.method == "POST":
+        titulo = request.form.get("titulo")
+        descripcion = request.form.get("descripcion")
+        if 'file' in request.files:
+            file = request.files['file']
+            if file and allowed_file(file.filename):
+                filename = secure_filename(file.filename)
+                file.save(os.path.join(app.config['UPLOAD_FOLDER'], filename))
+            else:
+                flash("Si no adjunto nada, adjunte un txt con la descripcion de la tarea.\
+                Error con el archivo adjunto.\
+                Le recordamos que solo pueden tener las siguientes extencionses:\
+                'txt', 'pdf', 'png', 'jpg', 'jpeg', 'gif', 'doc', 'docx', 'xls', 'zip', 'gz', 'ppt'.")
+                return redirect("/crear_tareas")
+        else:
+            filename = "None"
+
+
+        return redirect("/crear_tareas")
+    else:
+        return render_template("anadirT.html", id=idClase)
+
 
 @app.route("/calificar", methods=["GET", "POST"])
 def calificar():
     if not "type" in session:
+        flash("Cuidado mano, que tengo tu ip")
         return redirect("/")
     if session["type"] != "Admin" and session["type"] != "Profe":
         flash("Cuidado mano, que tengo tu ip")
@@ -157,6 +219,7 @@ def calificar():
 @app.route("/gestionDeUsuarios", methods=["GET", "POST"])
 def gestionUsuarios():
     if not "type" in session:
+        flash("Cuidado mano, que tengo tu ip")
         return redirect("/")
     if session["type"] != "Admin":
         flash("Cuidado, que tengo tu IP")
@@ -167,6 +230,7 @@ def gestionUsuarios():
 @app.route("/gestionDeUsuarios/actualizarA/<int:id>", methods=["GET", "POST"])
 def gestionUsuariosActualizarA(id):
     if not "type" in session:
+        flash("Cuidado mano, que tengo tu ip")
         return redirect("/")
     if session["type"] != "Admin":
         flash("Cuidado, que tengo tu IP")
@@ -203,6 +267,7 @@ def gestionUsuariosActualizarA(id):
 @app.route("/gestionDeUsuarios/actualizarM/<int:id>", methods=["GET", "POST"])
 def gestionUsuariosActualizarM(id):
     if not "type" in session:
+        flash("Cuidado mano, que tengo tu ip")
         return redirect("/")
     if session["type"] != "Admin":
         flash("Cuidado, que tengo tu IP")
@@ -233,6 +298,7 @@ def gestionUsuariosActualizarM(id):
 @app.route("/gestionDeUsuarios/actualizarG/<int:id>", methods=["GET", "POST"])
 def gestionUsuariosActualizarG(id):
     if not "type" in session:
+        flash("Cuidado mano, que tengo tu ip")
         return redirect("/")
     if session["type"] != "Admin":
         flash("Cuidado, que tengo tu IP")
@@ -254,6 +320,7 @@ def gestionUsuariosActualizarG(id):
 @app.route("/gestionDeUsuarios/anadirA", methods=["GET", "POST"])
 def gestionUsuariosAnadirA():
     if not "type" in session:
+        flash("Cuidado mano, que tengo tu ip")
         return redirect("/")
     if session["type"] != "Admin":
         flash("Cuidado, que tengo tu IP")
@@ -288,6 +355,7 @@ def gestionUsuariosAnadirA():
 @app.route("/gestionDeUsuarios/anadirM", methods=["GET", "POST"])
 def gestionUsuariosAnadirM():
     if not "type" in session:
+        flash("Cuidado mano, que tengo tu ip")
         return redirect("/")
     if session["type"] != "Admin":
         flash("Cuidado, que tengo tu IP")
@@ -318,6 +386,7 @@ def gestionUsuariosAnadirM():
 @app.route("/gestionDeUsuarios/anadirG", methods=["GET", "POST"])
 def gestionUsuariosAnadirG():
     if not "type" in session:
+        flash("Cuidado mano, que tengo tu ip")
         return redirect("/")
     if session["type"] != "Admin":
         flash("Cuidado, que tengo tu IP")
@@ -339,6 +408,7 @@ def gestionUsuariosAnadirG():
 @app.route("/gestionDeUsuarios/anadirC", methods=["GET", "POST"])
 def gestionUsuariosAnadirC():
     if not "type" in session:
+        flash("Cuidado mano, que tengo tu ip")
         return redirect("/")
     if session["type"] != "Admin":
         flash("Cuidado, que tengo tu IP")
@@ -368,6 +438,7 @@ def gestionUsuariosAnadirC():
 @app.route("/gestionDeUsuarios/Eliminar/<tipo>/<int:id>", methods=["GET", "POST"])
 def eliminar(tipo, id):
     if not "type" in session:
+        flash("Cuidado mano, que tengo tu ip")
         return redirect("/")
     if session["type"] != "Admin":
         flash("Cuidado, que tengo tu IP")
@@ -378,6 +449,7 @@ def eliminar(tipo, id):
 @app.route("/mantenimiento", methods=["GET", "POST"])
 def mantenimiento():
     if not "type" in session:
+        flash("Cuidado mano, que tengo tu ip")
         return redirect("/")
     if session["type"] != "Admin":
         flash("Cuidado, que tengo tu IP")

@@ -1,0 +1,25 @@
+{% extends "base.html" %}
+
+{% block contenido %}
+    <br>
+    <h1>Alumnos</h1>
+    <p> Ingrese los datos del alumno</p>
+
+    <form action="/crear_tareas/{{ id }}" method="post" enctype=multipart/form-data>
+        <table class="table">
+            <tr>
+                <th>Titulo:</th>
+                <th><input type="text" name="titulo" id="titulo" required/></th>
+            </tr>
+            <tr>
+                <th>Descripcion</th>
+                <th><textarea rows="6" cols="60" name="descripcion"></textarea></th>
+            </tr>
+            <tr>
+                <th>Adjuntos</th>
+                <th><input type="file" name="file"/></th>
+            </tr>
+        </table>
+        <input type="submit" value="Añadir la Tarea" id="boton" />
+    </form>
+{% endblock %}

@@ -1,0 +1,17 @@
+{% extends "base.html" %}
+
+{% block contenido %}
+<h1>Clases</h1>
+<p>Seleccione una de las siguientes clases para asignarle tareas.</p>
+    {% for clase in clases %}
+        <div class="row">
+            <div class="col-lg">
+                <div class="jumbotron">
+                    <h1 class="display-4">{{ clase.Nombre }}</h1>
+                    <hr class="my-4">
+                    <a class="btn btn-primary btn-lg" href="/crear_tareas/{{ clase.Id }}" role="button">Crear Tareas</a>
+                </div>
+            </div>
+        </div>
+{% endfor %}
+{% endblock %}

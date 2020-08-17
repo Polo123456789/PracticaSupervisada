@@ -1,31 +1,12 @@
-* Descripcion general
-
-  El proyecto se organiza en 3 partes. En esta hoja se describira el progreso
-  que se haga en cada una de las partes, con las fechas y horas a las que se 
-  completo. Puede ver el documento en texto plano, pero recomiendo verlo en un
-  editor de org, ya que le data el estilo correcto a cada una de las partes.
-
-** Interfaz grafica
-  
-** Base de Datos
-
-** Backend
+#+LATEX_HEADER: \userpackage{pdfgantt}
 
 * Diseño de la interfaz grafica [2/4] [50%]
 ** DONE Prototipo del layout general
-   CLOSED: [2020-08-06 jue. 12:32]
-   #+ATTR_ORG: :width 300
-   [[file:Diseño de Interfaz/Diseño_de_Interfaz_Prototipo1.JPG]]
-   Se va a separar en:
-*** Alumno
-    Va a poder ver tareas, subir respuestas, y ver notas
-*** Maestro
-    Va a poder subir tareas y calificar las notas del alumno
-*** Admin
-    Va a añadir y eliminar usuarios, ademas de programar las bajas para
-    mantenimiento
-** DONE Diseño interfaz admin [5/5] [100%]
-   CLOSED: [2020-08-12 mié. 18:51]
+   CLOSED: [2020-08-9 lun. 18:06] DEADLINE: <2021-08-09 lun.> SCHEDULED: <2021-08-09 lun.>
+
+** DONE Diseño interfaz admin
+   CLOSED: [2020-08-12 mié. 18:51] DEADLINE: <2021-08-12 jue.> SCHEDULED: <2021-08-09 lun.>
+
 **** DONE Homepage
      CLOSED: [2020-08-09 dom. 16:31]
 **** DONE Alumnos [2/2]
@@ -61,25 +42,25 @@
 ** TODO Calificaicones de tareas
    Pospuesto ya que aun no hay forma de que los alumnos las entreguen
 
-* Diseño de la base de datos [4/4] [100%]
+* Diseño de la base de datos [3/3] [100%]
 ** DONE Prototipo de la base de datos:
-   CLOSED: [2020-08-06 jue. 13:58]
+   CLOSED: [2020-08-06 jue. 13:58] DEADLINE: <2021-08-06 vie.> SCHEDULED: <2021-08-06 vie.>
+   #+ATTR_ORG: :width 300
     [[file:DiseñoDB/DiseñoBaseDatos1.png]]
+
 ** DONE Implementacion de la primera parte de la base de datos
-   CLOSED: [2020-08-07 vie. 18:39]
+   CLOSED: [2020-08-07 vie. 18:39] DEADLINE: <2021-08-07 sáb.> SCHEDULED: <2021-08-07 sáb.>
+
    Se implementaron los alumnos, maestros y grados. Estos son los escenciales
    para inciar las pruebas para el inicio de sesion
+
 ** DONE Implementacion de las demas tablas de la base de datos
-   CLOSED: [2020-08-09 dom. 16:27]
+   CLOSED: [2020-08-09 lun. 16:27] DEADLINE: <2021-08-09 lun. 18:00> SCHEDULED: <2021-08-08 dom.>
+
    En el proceso, decidi eliminar la tabla redundante "ClasesAsignadas",
    esta tenia que decir que clase era para cada maestro. Pero en si las
    clases ya tienen el id del maestro, haciendo la tabla "ClasesAsignadas"
    redundante.
-** DONE Rediseño a la base de datos
-   CLOSED: [2020-08-17 lun. 08:31]
-   Se ha eliminado la tabla ClasesAsignadas, y se a añadido una tabla entregas. Ambos cambios con el fin de 
-   eliminar el almacenamiento redundante de informacion
-    [[file:DiseñoDB/DiseñoBaseDatos2.png]]
 
 * Estructura del BackEnd [7/8] [87%]
 ** DONE Definir rutas basicas
