@@ -167,8 +167,6 @@ def crearTareas():
     clases = Clases.query.filter_by(IdMaestro=session["id"])
     return render_template("listaClases.html", clases=clases, type=session['type'])
 
-    return "Crear tareas"
-
 @app.route("/crear_tareas/<int:idClase>", methods=["GET", "POST"])
 def subirTareas(idClase):
     if not "type" in session:
@@ -186,7 +184,6 @@ def subirTareas(idClase):
         titulo = request.form.get("titulo")
         descripcion = request.form.get("descripcion")
         archivo = request.files['file']
-        app.logger.info(type(archivo))
         if archivo.filename:
             if allowed_file(archivo.filename):
                filename = secure_filename(archivo.filename)
@@ -200,13 +197,27 @@ def subirTareas(idClase):
             flash("Tarea sin adjuntos")
             filename = "SinArchivo"
 
+        # Creamos la tarea
         tarea = Tareas()
         tarea.IdClase           = idClase
         tarea.Titulo            = titulo
         tarea.Descripcion       = descripcion
         tarea.PathAdjuntos      = filename
-
         db.session.add(tarea)
+        db.session.commit()
+
+        # Y la asignamos a los alumnos del grado
+        idGrado = Clases.query.get(idClase).IdGrado
+        alumnos = Alumno.query.filter_by(IdGrado=idGrado).all()
+        for alumno in alumnos:
+            entrega = Entregas()
+            entrega.IdTarea           = tarea.Id
+            entrega.IdAlumno          = alumno.Id
+            entrega.PathAdjuntos      = "SinAdjuntos"
+            entrega.Respuesta         = "SinRespuesta"
+            entrega.Calificado        = False
+            entrega.Nota              = 0
+            db.session.add(entrega)
         db.session.commit()
 
         return redirect("/crear_tareas")
