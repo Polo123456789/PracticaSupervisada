@@ -1,0 +1,39 @@
+{% extends "base.html" %}
+
+{% block contenido %}
+{% if tarea %}
+<div class="row">
+    <h1>{{ tarea.Titulo }}</h1>
+</div>
+<div class="row">
+    <h5>Descripcion</h5>
+</div>
+<div class="row">
+    <p>
+         {{ tarea.Descripcion }}
+    </p>
+</div>
+<div class="row">
+    {% if tarea.PathAdjuntos != "SinArchivo"%}
+       <a href="/file/{{ tarea.PathAdjuntos }}" class="btn btn-dark">{{ tarea.PathAdjuntos }}</a>
+    {% endif %}
+</div>
+<div class="row">
+    <form action="/tareas/{{ tarea.Id }}" method="post" enctype="multipart/form-data">
+        <table class="table">
+                <th>Respuesta</th>
+                <th><textarea rows="6" cols="60" name="respuesta"></textarea></th>
+            </tr>
+            <tr>
+                <th>Adjuntos</th>
+                <th><input type="file" name="file"/></th>
+            </tr>
+        </table>
+        <input type="submit" value="Añadir la Tarea" id="boton" />
+    </form>
+</div>
+{% else %}
+<h1>Sea lo que estes haciendo, para amigo. Recuerda que se quien eres. Deja de hacer cosas que no te tocan</h1>
+{% endif %}
+
+{% endblock %}

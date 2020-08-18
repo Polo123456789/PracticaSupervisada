@@ -2,7 +2,7 @@ import hash
 import os
 import logging
 from flask import Flask, render_template, session, redirect, request, url_for\
-    , flash
+    , flash, send_from_directory
 from flask_sqlalchemy import SQLAlchemy
 from sqlalchemy import exc
 from werkzeug.utils import secure_filename
@@ -23,10 +23,6 @@ logging.basicConfig(level=logging.DEBUG)
 # Ejemplo de un log
 # app.logger.info(type(admin))
 # app.logger.info(admin)
-
-def allowed_file(filename):
-    return '.' in filename and \
-           filename.rsplit('.', 1)[1].lower() in ALLOWED_EXTENSIONS
 
 """---- Base de datos -----"""
 class Grado(db.Model):
@@ -78,6 +74,16 @@ class Entregas(db.Model):
     Calificado        = db.Column(db.Boolean, nullable=False)
     Nota              = db.Column(db.Integer, nullable=False)
 
+# Utilidades
+def allowed_file(filename):
+    return '.' in filename and \
+           filename.rsplit('.', 1)[1].lower() in ALLOWED_EXTENSIONS
+
+@app.route("/file/<filename>")
+def sendFile(filename):
+    filename.replace('_', ' ')
+    app.logger.info(filename)
+    return send_from_directory(app.config['UPLOAD_FOLDER'], filename, as_attachment=True)
 
 
 """---- Rutas de la pagina web -----"""
@@ -161,7 +167,11 @@ def ResolverTareas(idTarea):
         flash("Cuidado mano, que tengo tu ip")
         return redirect("/")
 
-    return f"{idTarea}"
+    if request.method == "POST":
+        return redirect("/tareas")
+    else:
+        tarea = Tareas.query.get(idTarea)
+        return render_template("realizarTarea.html", tarea=tarea)
 
 @app.route("/notas")
 def notas():
@@ -212,7 +222,7 @@ def subirTareas(idClase):
         if archivo.filename:
             if allowed_file(archivo.filename):
                filename = secure_filename(archivo.filename)
-               archivo.save(os.path.join(app.config['UPLOAD_FOLDER'], archivo.filename))
+               archivo.save(os.path.join(app.config['UPLOAD_FOLDER'], filename))
             else:
                flash("Error con el archivo adjunto.\
                Le recordamos que solo pueden tener las siguientes extencionses:\
