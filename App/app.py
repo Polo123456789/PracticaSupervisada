@@ -86,7 +86,7 @@ def sendFile(filename):
     return send_from_directory(app.config['UPLOAD_FOLDER'], filename, as_attachment=True)
 
 
-"""---- Rutas de la pagina web -----"""
+""" ---------------------- Rutas de la pagina web ---------------------- """
 # Login y home page
 @app.route("/")
 def index():
@@ -140,7 +140,7 @@ def loginMaestro():
     else:
         return render_template("login.html", quien="maestro")
 
-# Alumnos
+# ------------ Alumnos ------------
 @app.route("/tareas")
 def tareas():
     if not "type" in session:
@@ -168,6 +168,30 @@ def ResolverTareas(idTarea):
         return redirect("/")
 
     if request.method == "POST":
+        entrega = Entregas.query.get(idTarea)
+        if entrega is None:
+            flash("No hemos podido identificar la tarea")
+            return redirect("/tareas")
+        if entrega.IdAlumno != session["id"]:
+            flash("No puede entregar tareas que no le corresponden")
+            return redirect("/tareas")
+        archivo = request.files["file"]
+        if archivo.filename:
+            if allowed_file(archivo.filename):
+               filename = secure_filename(archivo.filename)
+               archivo.save(os.path.join(app.config['UPLOAD_FOLDER'], filename))
+            else:
+               flash("Error con el archivo adjunto.\
+               Le recordamos que solo pueden tener las siguientes extencionses:\
+               'txt', 'pdf', 'png', 'jpg', 'jpeg', 'gif', 'doc', 'docx', 'xls', 'zip', 'gz', 'ppt'.")
+               return redirect("/tareas")
+        else:
+            flash("Tarea sin adjuntos")
+            filename = "SinArchivo"
+
+        entrega.Respuesta = request.form.get("respuesta")
+        entrega.PathAdjuntos = filename
+        db.session.commit()
         return redirect("/tareas")
     else:
         tarea = Tareas.query.get(idTarea)
@@ -185,7 +209,7 @@ def notas():
     return "En desarrollo"
 
 
-# Maestros
+# ------------ Maestros ------------
 @app.route("/crear_tareas")
 def crearTareas():
     if not "type" in session:
@@ -261,7 +285,7 @@ def subirTareas(idClase):
 
 
 @app.route("/calificar", methods=["GET", "POST"])
-def calificar():
+def tareasCalificar():
     if not "type" in session:
         flash("Cuidado mano, que tengo tu ip")
         return redirect("/")
@@ -271,7 +295,18 @@ def calificar():
 
     return "Calificar"
 
-# Administradores
+@app.route("/calificar/<int:idTarea>", methods=["GET", "POST"])
+def calificarTareas(idTarea):
+    if not "type" in session:
+        flash("Cuidado mano, que tengo tu ip")
+        return redirect("/")
+    if session["type"] != "Admin" and session["type"] != "Profe":
+        flash("Cuidado mano, que tengo tu ip")
+        return redirect("/")
+
+    return f"Calificar {idTarea}"
+
+# ------------ Administradores ------------
 @app.route("/gestionDeUsuarios", methods=["GET", "POST"])
 def gestionUsuarios():
     if not "type" in session:

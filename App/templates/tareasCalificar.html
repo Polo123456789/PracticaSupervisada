@@ -1,0 +1,19 @@
+{% extends "base.html" %}
+
+{% block contenido %}
+<br>
+<h1>Tareas</h1>
+<p>Esta es la lista de tareas que tiene pendiente para calificar</p>
+<table class="table">
+    <tr>
+        <th>Clase</th>
+        <th>Alumno</th>
+        <th></th>
+    </tr>
+    {% for entrega in entregas %}
+    <tr>
+
+    </tr>
+    {% endfor %}
+</table>
+{% endblock %}
