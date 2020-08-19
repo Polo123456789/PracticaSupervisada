@@ -196,6 +196,13 @@ def ResolverTareas(idTarea):
         tarea = Tareas.query.get(idTarea)
         return render_template("realizarTarea.html", tarea=tarea)
 
+
+class VerNotas:
+    def __init__(self, clase, tarea, nota):
+        self.Clase = clase
+        self.Tarea = tarea
+        self.Nota = nota
+
 @app.route("/notas")
 def notas():
     if not "type" in session:
@@ -205,8 +212,16 @@ def notas():
         flash("Cuidado mano, que tengo tu ip")
         return redirect("/")
 
-    return "En desarrollo"
-
+    notas = []
+    entregas = Entregas.query.filter_by(Calificado=True)
+    for entrega in entregas:
+        app.logger.info(entrega)
+        tarea = Tareas.query.get(entrega.IdTarea)
+        clase = Clases.query.get(tarea.IdClase)
+        notas.append(
+            VerNotas(clase.Nombre, tarea.Titulo, entrega.Nota)
+        )
+    return render_template("verNotas.html", type=session["type"], notas=notas)
 
 # ------------ Maestros ------------
 @app.route("/crear_tareas")

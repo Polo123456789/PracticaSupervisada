@@ -1,0 +1,32 @@
+
+{% extends "base.html" %}
+
+{% block contenido %}
+{% if notas %}
+    <h1>Notas</h1>
+    <table class="table">
+        <tr>
+            <th>Clase</th>
+            <th>Tarea</th>
+            <th>Nota</th>
+        </tr>
+        {% for nota in notas %}
+        <tr>
+            <th>
+                {{ nota.Clase }}
+            </th>
+            <th>
+                {{ nota.Tarea }}
+            </th>
+            <th>
+                {{ nota.Nota }}
+            </th>
+        </tr>
+        {% endfor %}
+    </table>
+{% else %}
+    <p>
+        Lo siento, no tiene tareas calificadas aun
+    </p>
+{% endif %}
+{% endblock %}
