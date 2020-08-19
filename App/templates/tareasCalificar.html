@@ -7,12 +7,16 @@
 <table class="table">
     <tr>
         <th>Clase</th>
+        <th>Tarea</th>
         <th>Alumno</th>
         <th></th>
     </tr>
     {% for entrega in entregas %}
     <tr>
-
+        <td>{{ entrega.clase }}</td>
+        <td>{{ entrega.tarea }}</td>
+        <td>{{ entrega.alumno }}</td>
+        <td><a class="btn btn-secondary" href="/calificar/{{ entrega.IdEntrega }}">Calificar</a></td>
     </tr>
     {% endfor %}
 </table>

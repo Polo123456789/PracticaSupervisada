@@ -283,6 +283,12 @@ def subirTareas(idClase):
     else:
         return render_template("anadirT.html", id=idClase)
 
+class EntregaPendiente:
+    def __init__(self, alumno, tarea, clase, IdEntrega):
+        self.alumno = alumno
+        self.tarea = tarea
+        self.clase = clase
+        self.IdEntrega = IdEntrega
 
 @app.route("/calificar", methods=["GET", "POST"])
 def tareasCalificar():
@@ -292,8 +298,32 @@ def tareasCalificar():
     if session["type"] != "Admin" and session["type"] != "Profe":
         flash("Cuidado mano, que tengo tu ip")
         return redirect("/")
+    if not "id" in session:
+        flash("Ha ocurrido un error, y no hemos podido idedentificar su id\
+        , porfavor inicie sesion otra vez")
+        return redirect("/login/maestro")
 
-    return "Calificar"
+    entregasPorCalificar = []
+    clasesDelMaestro = Clases.query.filter_by(IdMaestro=session["id"]).all()
+    for clase in clasesDelMaestro:
+        tareas = Tareas.query.filter_by(IdClase=clase.Id).all()
+        for tarea in tareas:
+            entregasPendientes = Entregas.query.filter(
+                Entregas.Respuesta!="SinRespuesta",
+                Entregas.Calificado==False,
+                Entregas.IdTarea==tarea.Id
+            ).all()
+            for entrega in entregasPendientes:
+                entregasPorCalificar.append(
+                    EntregaPendiente(
+                        Alumno.query.get(entrega.IdAlumno).Nombre,
+                        Tareas.query.get(entrega.IdTarea).Titulo,
+                        clase.Nombre,
+                        entrega.Id
+                    )
+                )
+
+    return render_template("tareasCalificar.html", entregas=entregasPorCalificar, type=session["type"])
 
 @app.route("/calificar/<int:idTarea>", methods=["GET", "POST"])
 def calificarTareas(idTarea):
