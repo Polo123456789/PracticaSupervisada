@@ -82,7 +82,6 @@ def allowed_file(filename):
 @app.route("/file/<filename>")
 def sendFile(filename):
     filename.replace('_', ' ')
-    app.logger.info(filename)
     return send_from_directory(app.config['UPLOAD_FOLDER'], filename, as_attachment=True)
 
 
@@ -290,7 +289,7 @@ class EntregaPendiente:
         self.clase = clase
         self.IdEntrega = IdEntrega
 
-@app.route("/calificar", methods=["GET", "POST"])
+@app.route("/calificar")
 def tareasCalificar():
     if not "type" in session:
         flash("Cuidado mano, que tengo tu ip")
@@ -325,15 +324,28 @@ def tareasCalificar():
 
     return render_template("tareasCalificar.html", entregas=entregasPorCalificar, type=session["type"])
 
-@app.route("/calificar/<int:idTarea>", methods=["GET", "POST"])
-def calificarTareas(idTarea):
+@app.route("/calificar/<int:idEntrega>", methods=["GET", "POST"])
+def calificarTareas(idEntrega):
     if not "type" in session:
         flash("Cuidado mano, que tengo tu ip")
         return redirect("/")
     if session["type"] != "Admin" and session["type"] != "Profe":
         flash("Cuidado mano, que tengo tu ip")
         return redirect("/")
-
+    if request.method == "POST":
+        nota = request.form.get("nota")
+        entrega = Entregas.query.get(idEntrega)
+        if entrega:
+            entrega.Nota = nota
+            entrega.Calificado = True
+            db.session.commit()
+        else:
+            flash("Id de tarea incorrecto")
+        return redirect("/calificar")
+    else:
+        entrega = Entregas.query.get(idEntrega)
+        tarea = Tareas.query.get(entrega.IdTarea)
+        return render_template("calificarTarea.html", entrega=entrega, tarea=tarea)
     return f"Calificar {idTarea}"
 
 # ------------ Administradores ------------
@@ -544,7 +556,6 @@ def gestionUsuariosAnadirC():
             clase.Nombre    = nombre 
             clase.IdGrado   = idGrado
             clase.IdMaestro = idMaestro
-            app.logger.info(request.form.get("IdGrado"))
             db.session.add(clase)
             db.session.commit()
 

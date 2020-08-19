@@ -62,6 +62,9 @@
     CLOSED: [2020-08-17 lun. 12:10]
 ** TODO Calificaicones de tareas
    Pospuesto ya que aun no hay forma de que los alumnos las entreguen
+*** DONE Enlistar tareas por calificar
+    CLOSED: [2020-08-19 mié. 10:38]
+*** TODO Calificar Tarea
 
 ** TODO Homepage del alumno
    Tendra que ver la lista de tareas pendientes que tenga
