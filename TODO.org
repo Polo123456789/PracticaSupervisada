@@ -11,7 +11,7 @@
 
 ** Backend
 
-* Diseño de la interfaz grafica [3/4] [75%]
+* Diseño de la interfaz grafica [5/5] [100%]
 ** DONE Prototipo del layout general
    CLOSED: [2020-08-06 jue. 12:32]
    #+ATTR_ORG: :width 300
@@ -60,13 +60,16 @@
     Y que en estas pueda ir sumando las tareas
 *** DONE Template para la creacion de tareas
     CLOSED: [2020-08-17 lun. 12:10]
-** TODO Calificaicones de tareas
+** DONE Calificaicones de tareas
+   CLOSED: [2020-08-19 mié. 16:54]
    Pospuesto ya que aun no hay forma de que los alumnos las entreguen
 *** DONE Enlistar tareas por calificar
     CLOSED: [2020-08-19 mié. 10:38]
-*** TODO Calificar Tarea
+*** DONE Calificar Tarea
+    CLOSED: [2020-08-19 mié. 16:54]
 
-** TODO Homepage del alumno
+** DONE Homepage del alumno
+   CLOSED: [2020-08-19 mié. 16:54]
    Tendra que ver la lista de tareas pendientes que tenga
 * Diseño de la base de datos [4/4] [100%]
 ** DONE Prototipo de la base de datos:
