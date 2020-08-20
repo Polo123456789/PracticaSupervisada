@@ -194,7 +194,7 @@ def ResolverTareas(idTarea):
         return redirect("/tareas")
     else:
         tarea = Tareas.query.get(idTarea)
-        return render_template("realizarTarea.html", tarea=tarea)
+        return render_template("realizarTarea.html", tarea=tarea, type=session["type"])
 
 
 class VerNotas:
@@ -295,7 +295,7 @@ def subirTareas(idClase):
 
         return redirect("/crear_tareas")
     else:
-        return render_template("anadirT.html", id=idClase)
+        return render_template("anadirT.html", id=idClase, type=session["type"])
 
 class EntregaPendiente:
     def __init__(self, alumno, tarea, clase, IdEntrega):
@@ -360,7 +360,7 @@ def calificarTareas(idEntrega):
     else:
         entrega = Entregas.query.get(idEntrega)
         tarea = Tareas.query.get(entrega.IdTarea)
-        return render_template("calificarTarea.html", entrega=entrega, tarea=tarea)
+        return render_template("calificarTarea.html", entrega=entrega, tarea=tarea, type=session["type"])
     return f"Calificar {idTarea}"
 
 # ------------ Administradores ------------
@@ -582,28 +582,13 @@ def gestionUsuariosAnadirC():
         maestros = Maestro.query.all()
         return render_template("anadirC.html", type=session["type"], grados=grados, maestros=maestros)
 
-@app.route("/gestionDeUsuarios/Eliminar/<tipo>/<int:id>", methods=["GET", "POST"])
-def eliminar(tipo, id):
-    if not "type" in session:
-        flash("Cuidado mano, que tengo tu ip")
-        return redirect("/")
-    if session["type"] != "Admin":
-        flash("Cuidado, que tengo tu IP")
-        return redirect("/")
+@app.errorhandler(404)
+def sinPagina(e):
+    return render_template("404.html"), 404
 
-    return "Eliminar"
-
-@app.route("/mantenimiento", methods=["GET", "POST"])
-def mantenimiento():
-    if not "type" in session:
-        flash("Cuidado mano, que tengo tu ip")
-        return redirect("/")
-    if session["type"] != "Admin":
-        flash("Cuidado, que tengo tu IP")
-        return redirect("/")
-
-    return "Mantenimiento"
-
+@app.errorhandler(500)
+def laRegaste(e):
+    return render_template("500.html"), 500
 
 if __name__ == "__main__":
     app.run()
