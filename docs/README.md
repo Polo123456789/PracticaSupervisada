@@ -7,7 +7,7 @@ resuelven, y los maestros califican. Es en realidad bastante simple. En el
 proceso se pueden enviar y transmitir archivos.
 
 # Como probarlo? 
-Aqui tienes [una serie de tutoriales en youtube]()
+Aqui tienes [un tutorial de youtube](https://www.youtube.com/watch?v=7b1A8VQnLUQ)
 explicando como funciona la aplicacion. Tanto el setup necesario para probarlo,
 como el proceso que se tiene que seguir para montar el Classroom.
 
